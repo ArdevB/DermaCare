@@ -1,5 +1,5 @@
 import Product from "../models/Product.js";
-import uploadFile from "../utils/file.js";
+import { uploadFile } from "../utils/file.js";
 import { ADMIN } from "../constants/roles.js";
 
 const getProducts = async (req, res) => {

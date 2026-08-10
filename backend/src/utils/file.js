@@ -1,13 +1,14 @@
 import { v2 as cloudinary } from "cloudinary";
+import "../config/cloudinary.js"; // ensures cloudinary.config() has run before any upload/delete call
 
-const CLOUDINARY_FOLER = "DermaCare";
+const CLOUDINARY_FOLDER = "DermaCare";
 
 async function uploadFile(files) {
   const uploadedFiles = [];
   for (const file of files) {
     const result = await new Promise((resolve, reject) => {
       cloudinary.uploader
-        .upload_stream({ folder: CLOUDINARY_FOLER }, (error, result) => {
+        .upload_stream({ folder: CLOUDINARY_FOLDER }, (error, result) => {
           if (error) {
             return reject(error);
           } else {
@@ -16,9 +17,21 @@ async function uploadFile(files) {
         })
         .end(file.buffer);
     });
-    uploadResults.push(result);
+    uploadedFiles.push(result);
   }
   return uploadedFiles;
 }
 
-export default uploadFile;
+async function deleteFile(publicId) {
+  if (!publicId) return;
+  try {
+    await cloudinary.uploader.destroy(publicId);
+  } catch (error) {
+    console.error(
+      `Failed to delete Cloudinary file ${publicId}:`,
+      error.message,
+    );
+  }
+}
+
+export { uploadFile, deleteFile };

@@ -1,6 +1,6 @@
 import { MERCHANT, USER } from "../constants/roles.js";
 import User from "../models/User.js";
-import uploadFile from "../utils/file.js";
+import { uploadFile } from "../utils/file.js";
 
 const createUser = async (data) => await User.create(data);
 
