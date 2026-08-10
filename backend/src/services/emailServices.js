@@ -1,5 +1,5 @@
 import { resend } from "../utils/email.js";
-import { config } from "../config/config.js";
+import config from "../config/config.js";
 
 const templates = {
   welcome: ({ name }) => ({

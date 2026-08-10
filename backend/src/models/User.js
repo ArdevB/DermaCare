@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import { ApiError } from "../utils/ApiError.js";
 import { ROLE_VALUES, ROLES } from "../constants/roles.js";
 
 const addressSchema = new mongoose.Schema(
@@ -63,7 +64,7 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ROLE_VALUES,
-      default: ROLE.USER,
+      default: ROLE_VALUES.USER,
     },
     profileImageUrl: {
       url: { type: String, default: "" },
@@ -91,12 +92,12 @@ const userSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-userSchema.pre("save", async function hashPassword(next) {
-  if (!this.isModified("password")) return next();
-  const salt = await bcrypt.genSalt(12);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
+// userSchema.pre("save", async function hashPassword(next) {
+//   if (!this.isModified("password")) return next();
+//   const salt = await bcrypt.genSalt(12);
+//   this.password = await bcrypt.hash(this.password, salt);
+//   next();
+// });
 
 userSchema.methods.comparePassword = async function comparePassword(candidate) {
   return bcrypt.compare(candidate, this.password);

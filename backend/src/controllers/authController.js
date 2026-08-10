@@ -1,5 +1,6 @@
-import authService from "../services/authService.js";
+import authService from "../services/authServices.js";
 import config from "../config/config.js";
+import { ApiError } from "../utils/ApiError.js";
 
 const ACCESS_TOKEN_COOKIE_OPTIONS = {
   httpOnly: true,

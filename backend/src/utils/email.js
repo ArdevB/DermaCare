@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import config from "../config/config.js";
 
-const resend = new Resend(config.email.resendApiKey);
+const resend = new Resend(config.emailApiKey);
 
 /**
  * @param {string} to

@@ -17,16 +17,19 @@ const buildAuthPayload = (user) => ({
 });
 
 const login = async (data) => {
-  const user = await User.findOne({ email: data.email });
+  const user = await User.findOne({ email: data.email }).select("+password");
 
   if (!user) throw { statusCode: 404, message: "User not found" };
 
-  const isPasswordMatch = bcrypt.compareSync(data.password, user.password);
+  const isPasswordMatch = await bcrypt.compareSync(
+    data.password,
+    user.password,
+  );
 
   if (!isPasswordMatch) throw { statusCode: 401, message: "Invalid password" };
 
-  const accessToken = generateAccessToken(buildAuthPayload(user));
-  const refreshToken = generateRefreshToken(buildAuthPayload(user));
+  // const accessToken = generateAccessToken(buildAuthPayload(user));
+  // const refreshToken = generateRefreshToken(buildAuthPayload(user));
 
   return {
     _id: user._id,
@@ -43,7 +46,7 @@ const register = async (data) => {
 
   if (user) throw { statusCode: 400, message: "Email already exists" };
 
-  const hashedPassword = bcrypt.hashSync(data.password);
+  const hashedPassword = bcrypt.hashSync(data.password, 10);
 
   const registeredUser = await User.create({
     name: data.name,
@@ -57,6 +60,11 @@ const register = async (data) => {
     subject: "Welcome to DermaCare",
     body: `<div><h1>Welcome, ${registeredUser.name}!</h1><p>Thanks for joining DermaCare.</p></div>`,
   }).catch((err) => console.error("Welcome email failed:", err.message));
+
+  const accessToken = generateAccessToken(buildAuthPayload(registeredUser._id));
+  const refreshToken = generateRefreshToken(
+    buildAuthPayload(registeredUser._id),
+  );
 
   return {
     user: {
@@ -131,7 +139,7 @@ const resetPassword = async (data) => {
     throw { statusCode: 400, message: "Token already used." };
   }
 
-  const hashedPassword = bcrypt.hashSync(newPassword);
+  const hashedPassword = bcrypt.hashSync(newPassword, 10);
 
   await User.findByIdAndUpdate(userId, { password: hashedPassword });
 
