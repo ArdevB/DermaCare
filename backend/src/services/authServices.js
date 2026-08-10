@@ -1,9 +1,20 @@
-import User from "../models/User.js";
 import crypto from "crypto";
+import User from "../models/User.js";
+import { ApiError } from "../utils/ApiError.js";
 import bcrypt from "bcryptjs";
 import ResetPassword from "../models/ResetPassword.js";
 import sentEmail from "../utils/email.js";
 import config from "../config/config.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+} from "../utils/jwt.js";
+
+const buildAuthPayload = (user) => ({
+  id: user._id.toString(),
+  role: user.role,
+});
 
 const login = async (data) => {
   const user = await User.findOne({ email: data.email });
@@ -13,6 +24,9 @@ const login = async (data) => {
   const isPasswordMatch = bcrypt.compareSync(data.password, user.password);
 
   if (!isPasswordMatch) throw { statusCode: 401, message: "Invalid password" };
+
+  const accessToken = generateAccessToken(buildAuthPayload(user));
+  const refreshToken = generateRefreshToken(buildAuthPayload(user));
 
   return {
     _id: user._id,
@@ -45,13 +59,35 @@ const register = async (data) => {
   }).catch((err) => console.error("Welcome email failed:", err.message));
 
   return {
-    _id: registeredUser._id,
-    name: registeredUser.name,
-    email: registeredUser.email,
-    address: registeredUser.address,
-    phone: registeredUser.phone,
-    role: registeredUser.role,
+    user: {
+      _id: registeredUser._id,
+      name: registeredUser.name,
+      email: registeredUser.email,
+      address: registeredUser.address,
+      phone: registeredUser.phone,
+      role: registeredUser.role,
+    },
+    accessToken,
+    refreshToken,
   };
+};
+
+const refreshAccessToken = async (incomingToken) => {
+  if (!incomingToken)
+    throw { statusCode: 401, message: "Refresh token missing" };
+
+  let decoded;
+  try {
+    decoded = verifyRefreshToken(incomingToken);
+  } catch {
+    throw { statusCode: 401, message: "Invalid or expired refresh token" };
+  }
+
+  const user = await User.findById(decoded.id);
+  if (!user) throw { statusCode: 401, message: "User no longer exists" };
+
+  const accessToken = generateAccessToken(buildAuthPayload(user));
+  return { accessToken };
 };
 
 const forgotPassword = async (email) => {
@@ -104,4 +140,10 @@ const resetPassword = async (data) => {
   return { message: "Password reset successfully" };
 };
 
-export default { register, login, forgotPassword, resetPassword };
+export default {
+  register,
+  login,
+  refreshAccessToken,
+  forgotPassword,
+  resetPassword,
+};

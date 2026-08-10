@@ -2,7 +2,7 @@ import { verifyAccessToken } from "../utils/jwt.js";
 import User from "../models/User.js";
 
 const auth = async (req, res, next) => {
-  const authToken = req.cookies?.token;
+  const authToken = req.cookies?.accessToken;
 
   if (!authToken) return res.status(401).send("User not authenticated.");
 
