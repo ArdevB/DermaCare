@@ -13,10 +13,10 @@ const favouriteSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-// Prevent duplicate favourites for the same user/product pair
+// A user can favourite a given product only once.
 favouriteSchema.index({ user: 1, product: 1 }, { unique: true });
 
 const Favourite = mongoose.model("Favourite", favouriteSchema);

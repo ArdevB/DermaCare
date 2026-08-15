@@ -1,34 +1,34 @@
 import express from "express";
-import productController from "../controllers/productController.js";
-import auth from "../middleware/auth.js";
-import roleBasedAuth from "../middleware/roleBasedAuth.js";
-import { MERCHANT } from "../utils/roles.js";
+import * as productController from "../controllers/productController.js";
+import { protect, authorizeRoles } from "../middleware/auth.js";
+import validate from "../middleware/validate.js";
+import upload from "../middleware/upload.js";
+import { createProductSchema, updateProductSchema } from "../validators/productValidators.js";
 
 const router = express.Router();
 
 router.get("/", productController.getProducts);
-
-router.get("/:id", productController.getProductById);
+router.get("/:id", productController.getProduct);
 
 router.post(
   "/",
-  auth,
-  roleBasedAuth(MERCHANT),
-  productController.createProduct,
+  protect,
+  authorizeRoles("admin"),
+  upload.array("images", 6),
+  validate(createProductSchema),
+  productController.createProduct
 );
 
 router.put(
   "/:id",
-  auth,
-  roleBasedAuth(MERCHANT),
-  productController.updateProduct,
+  protect,
+  authorizeRoles("admin"),
+  upload.array("images", 6),
+  validate(updateProductSchema),
+  productController.updateProduct
 );
 
-router.delete(
-  "/:id",
-  auth,
-  roleBasedAuth(MERCHANT),
-  productController.deleteProduct,
-);
+router.delete("/:id/image", protect, authorizeRoles("admin"), productController.deleteProductImage);
+router.delete("/:id", protect, authorizeRoles("admin"), productController.deleteProduct);
 
 export default router;

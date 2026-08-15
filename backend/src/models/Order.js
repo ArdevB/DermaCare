@@ -1,13 +1,4 @@
 import mongoose from "mongoose";
-import {
-  ORDER_STATUS_VALUES,
-  ORDER_STATUSES,
-} from "../constants/orderStatuses.js";
-import { PAYMENT_METHOD_VALUES } from "../constants/paymentMethods.js";
-import {
-  PAYMENT_STATUS_VALUES,
-  PAYMENT_STATUSES,
-} from "../constants/paymentStatuses.js";
 
 const orderItemSchema = new mongoose.Schema(
   {
@@ -16,83 +7,68 @@ const orderItemSchema = new mongoose.Schema(
       ref: "Product",
       required: true,
     },
-    name: { type: String, required: true },
-    image: { type: String },
-    price: { type: Number, required: true },
+    name: { type: String, required: true }, // snapshot at time of order
+    price: { type: Number, required: true }, // snapshot at time of order (backend-derived, never trust client)
     quantity: { type: Number, required: true, min: 1 },
   },
-  { _id: false },
-);
-
-const shippingAddressSchema = new mongoose.Schema(
-  {
-    fullName: { type: String, required: true },
-    phone: { type: String, required: true },
-    phone: { type: String, required: true },
-    province: { type: String, required: true },
-    city: { type: String, required: true },
-    street: { type: String, required: true },
-    landmark: { type: String },
-  },
-  { _id: false },
+  { _id: false }
 );
 
 const orderSchema = new mongoose.Schema(
   {
+    orderNumber: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
-    },
-    orderNumber: {
-      type: String,
-      required: true,
-      unique: true, // Ensure order number is unique Eg. #12345
+      index: true,
     },
     items: {
       type: [orderItemSchema],
-      validate: [(arr) => arr.length > 0, "Order must have at least one item"],
+      validate: [(arr) => arr.length > 0, "Order must contain at least one item"],
     },
-    shippingAddress: shippingAddressSchema,
-
-    paymentMethod: {
-      type: String,
-      enum: PAYMENT_METHOD_VALUES,
-      required: true,
+    shippingAddress: {
+      fullName: { type: String, required: true },
+      phone: { type: String, required: true },
+      addressLine1: { type: String, required: true },
+      addressLine2: { type: String },
+      city: { type: String, required: true },
+      state: { type: String, required: true },
+      postalCode: { type: String, required: true },
+      country: { type: String, required: true },
     },
-
-    paymentStatus: {
-      type: String,
-      enum: PAYMENT_STATUS_VALUES,
-      default: PAYMENT_STATUSES.PENDING,
-    },
-    payment: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Payment",
-      default: null,
-    },
+    itemsTotal: { type: Number, required: true, min: 0 },
+    shippingFee: { type: Number, required: true, default: 0, min: 0 },
+    totalAmount: { type: Number, required: true, min: 0 },
     status: {
       type: String,
-      enum: ORDER_STATUS_VALUES,
-      default: ORDER_STATUSES.PENDING,
+      enum: ["pending", "processing", "shipped", "delivered", "cancelled"],
+      default: "pending",
     },
-    statusHistory: [
-      {
-        status: { type: String, enum: ORDER_STATUS_VALUES },
-        changedAt: { type: Date, default: Date.now },
-        note: { type: String },
+    payment: {
+      method: {
+        type: String,
+        enum: ["cod", "card", "online"],
+        default: "cod",
       },
-    ],
-
-    deliveredAt: { type: Date },
-    cancelledAt: { type: Date },
-    cancelReason: { type: String },
+      status: {
+        type: String,
+        enum: ["pending", "paid", "failed", "refunded"],
+        default: "pending",
+      },
+      transactionId: { type: String, default: null },
+      paidAt: { type: Date, default: null },
+    },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 orderSchema.index({ user: 1, createdAt: -1 });
-orderSchema.index({ orderNumber: 1 });
 
 const Order = mongoose.model("Order", orderSchema);
 export default Order;

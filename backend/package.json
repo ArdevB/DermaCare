@@ -1,33 +1,32 @@
 {
-  "name": "backend",
+  "name": "dermacare-server",
   "version": "1.0.0",
-  "description": "DermaCare E-commcerce Website",
-  "main": "./src/app.js",
+  "description": "DermaCare MERN backend - skincare e-commerce API",
+  "main": "./src/server.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/app.js",
-    "dev": "nodemon ./src/app.js"
+    "start": "node ./src/server.js",
+    "dev": "nodemon ./src/server.js"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "bcrypt": "^6.0.0",
-    "bcryptjs": "^3.0.3",
-    "cloudinary": "^2.10.0",
-    "cors": "^2.8.6",
-    "crypto": "^1.0.1",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3",
-    "mongodb": "^7.5.0",
-    "mongoose": "^9.8.0",
-    "multer": "^2.2.0",
-    "nodemon": "^3.1.14",
-    "razorpay": "^2.9.8",
-    "resend": "^6.18.1",
-    "stripe": "^22.3.2",
-    "validator": "^13.15.35",
-    "zod": "^4.4.3"
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.4.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.5.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "zod": "^3.23.8",
+    "winston": "^3.13.0",
+    "@google/generative-ai": "^0.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
   }
 }

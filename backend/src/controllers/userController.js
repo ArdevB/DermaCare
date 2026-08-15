@@ -1,90 +1,24 @@
-import userService from "../services/userService.js";
+import asyncHandler from "../utils/asyncHandler.js";
+import ApiResponse from "../utils/ApiResponse.js";
+import * as userService from "../services/userService.js";
 
-const createUser = async (req, res) => {
-  try {
-    const data = await userService.createUser(req.body);
+export const getUsers = asyncHandler(async (req, res) => {
+  const { page, limit } = req.query;
+  const result = await userService.listUsers({ page: page ? Number(page) : 1, limit: limit ? Number(limit) : 20 });
+  res.status(200).json(new ApiResponse(200, result));
+});
 
-    res.status(201).json(data);
-  } catch (error) {
-    res.status(error.statusCode || 500).send({ error: error.message });
-  }
-};
+export const getUser = asyncHandler(async (req, res) => {
+  const user = await userService.getUserById(req.params.id);
+  res.status(200).json(new ApiResponse(200, { user }));
+});
 
-const getUser = async (req, res) => {
-  const data = await userService.getUsers();
+export const updateUserRole = asyncHandler(async (req, res) => {
+  const user = await userService.updateUserRole(req.params.id, req.body.role, req.user);
+  res.status(200).json(new ApiResponse(200, { user }, "User role updated."));
+});
 
-  res.status(200).json(data);
-};
-
-const updateUser = async (req, res) => {
-  const id = req.params.id;
-
-  try {
-    const data = await userService.updateUser(id, req.body, req.user);
-
-    res.status(200).json(data);
-  } catch (error) {
-    res.status(error.statusCode || 500).send({ error: error.message });
-  }
-};
-
-const getUserById = async (req, res) => {
-  try {
-    const id = req.params.id;
-
-    const data = await userService.getUserById(id);
-
-    res.status(200).json(data);
-  } catch (error) {
-    res.status(error.statusCode || 500).send({ error: error.message });
-  }
-};
-
-const deleteUser = async (req, res) => {
-  const id = req.params.id;
-
-  try {
-    const data = await userService.deleteUser(id);
-
-    res.status(200).json({ message: "User deleted successfully" });
-  } catch (error) {
-    res.status(error.statusCode || 500).send({ error: error.message });
-  }
-};
-
-const updateProfileImage = async (req, res) => {
-  const id = req.params.id;
-  const file = req.file;
-
-  try {
-    const data = await userService.updateProfileImage(id, file, req.user);
-
-    res.json(data);
-  } catch (error) {
-    res.status(error.statusCode || 500).send({ error: error.message });
-  }
-};
-
-const createMerchant = async (req, res) => {
-  const userId = req.body.userId;
-  try {
-    if (!userId) {
-      return res.status(400).json({ message: "User ID is required" });
-    }
-    const data = await userService.createMerchant(userId);
-
-    res.json(data);
-  } catch (error) {
-    res.status(error.statusCode || 500).send({ error: error.message });
-  }
-};
-
-export default {
-  createUser,
-  getUser,
-  updateUser,
-  getUserById,
-  deleteUser,
-  updateProfileImage,
-  createMerchant,
-};
+export const deleteUser = asyncHandler(async (req, res) => {
+  await userService.deleteUser(req.params.id, req.user);
+  res.status(200).json(new ApiResponse(200, null, "User deleted."));
+});

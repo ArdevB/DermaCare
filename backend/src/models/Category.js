@@ -1,40 +1,48 @@
 import mongoose from "mongoose";
 
-const categorySchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-    enum: ["Skin Care", "Hair Care", "Makeup", "Body Care"],
+const categorySchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Category name is required"],
+      unique: true,
+      trim: true,
+      maxlength: [100, "Category name cannot exceed 100 characters"],
+    },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      index: true,
+    },
+    description: {
+      type: String,
+      trim: true,
+      maxlength: [500, "Description cannot exceed 500 characters"],
+    },
+    image: {
+      url: { type: String, default: null },
+      publicId: { type: String, default: null },
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
-  slug: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-  },
-  parentCategory: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Category",
-    default: null, // supports subcategories later, e.g. "Serums" under "Skin Care"
-  },
-  description: {
-    type: String,
-    default: "",
-  },
-  image: {
-    url: { type: String, default: "" },
-    publicId: { type: String, default: "" },
-  },
-  isActive: {
-    type: Boolean,
-    default: true,
-  },
-  timestamps: true,
-});
+  { timestamps: true }
+);
 
-categorySchema.index({ slug: 1 });
+categorySchema.pre("validate", function (next) {
+  if (this.name && (!this.slug || this.isModified("name"))) {
+    this.slug = this.name
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+  }
+  next();
+});
 
 const Category = mongoose.model("Category", categorySchema);
 export default Category;

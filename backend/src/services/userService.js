@@ -1,90 +1,38 @@
-import { MERCHANT, USER } from "../constants/roles.js";
 import User from "../models/User.js";
-import { uploadFile } from "../utils/file.js";
+import ApiError from "../utils/ApiError.js";
 
-const createUser = async (data) => await User.create(data);
-
-const getUsers = async () => {
-  const users = await User.find();
-  return users;
+export const listUsers = async ({ page = 1, limit = 20 }) => {
+  const skip = (page - 1) * limit;
+  const [users, total] = await Promise.all([
+    User.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
+    User.countDocuments(),
+  ]);
+  return { users, pagination: { total, page: Number(page), limit: Number(limit), pages: Math.ceil(total / limit) } };
 };
 
-const getUserById = async (id) => {
+export const getUserById = async (id) => {
   const user = await User.findById(id);
-
-  if (!user) {
-    throw {
-      statusCode: 404,
-      message: "User not found",
-    };
-  }
+  if (!user) throw ApiError.notFound("User not found.");
+  return user;
 };
 
-const updateUser = async (id, data, authUser) => {
+export const updateUserRole = async (id, role, requestingUser) => {
+  if (id === requestingUser._id.toString()) {
+    throw ApiError.badRequest("You cannot change your own role.");
+  }
   const user = await User.findById(id);
+  if (!user) throw ApiError.notFound("User not found.");
 
-  if (user._id != user._id && !authUser.roles.includes(ADMIN)) {
-    throw {
-      statusCode: 403,
-      message: "You are not authorized to update this user",
-    };
+  user.role = role;
+  await user.save();
+  return user;
+};
+
+export const deleteUser = async (id, requestingUser) => {
+  if (id === requestingUser._id.toString()) {
+    throw ApiError.badRequest("You cannot delete your own account.");
   }
-
-  const updatedUser = await User.findByIdAndUpdate(
-    id,
-    {
-      name: data.name,
-      phone: data.phone,
-      address: data.address,
-    },
-    { new: true },
-  );
-
-  return updatedUser;
-};
-
-const deleteUser = async (id) => {
-  const updatedUser = await User.findByIdAndDelete(id);
-};
-
-const updateProfileImage = async (id, file, authUser) => {
   const user = await User.findById(id);
-
-  if (user._id != user._id && !authUser.roles.includes(ADMIN)) {
-    throw {
-      statusCode: 403,
-      message: "You are not authorized to update this user",
-    };
-  }
-  const uploadedFile = await uploadFile([file]);
-
-  const updatedUser = await User.findByIdAndUpdate(
-    id,
-    {
-      profileImage: uploadedFile[0]?.url,
-    },
-    { new: true },
-  );
-};
-
-const createMerchant = async (userId) => {
-  const updatedUser = await User.findByIdAndUpdate(
-    userId,
-    {
-      roles: [USER, MERCHANT],
-    },
-    { new: true },
-  );
-
-  return updatedUser;
-};
-
-export default {
-  createUser,
-  getUsers,
-  getUserById,
-  updateUser,
-  deleteUser,
-  updateProfileImage,
-  createMerchant,
+  if (!user) throw ApiError.notFound("User not found.");
+  await user.deleteOne();
 };

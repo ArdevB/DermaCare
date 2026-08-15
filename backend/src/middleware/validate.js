@@ -1,17 +1,14 @@
-import { ApiError } from "../utils/ApiError.js";
+import ApiError from "../utils/ApiError.js";
 
-/**
- * Wraps a Zod schema. Usage: validate(productValidator.createSchema)
- */
-export const validate = (schema) => (req, res, next) => {
-  const result = schema.safeParse(req.body);
+// Wraps a zod schema and validates req.body (or another part of req) against it.
+const validate = (schema, source = "body") => (req, res, next) => {
+  const result = schema.safeParse(req[source]);
   if (!result.success) {
-    const errors = result.error.errors.map((e) => ({
-      field: e.path.join("."),
-      message: e.message,
-    }));
-    return next(new ApiError(400, "Validation failed", errors));
+    const messages = result.error.errors.map((e) => `${e.path.join(".")}: ${e.message}`);
+    return next(ApiError.badRequest("Validation failed", messages));
   }
-  req.body = result.data;
+  req[source] = result.data;
   next();
 };
+
+export default validate;
