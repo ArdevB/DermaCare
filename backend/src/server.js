@@ -6,6 +6,14 @@ import logger from "./utils/logger.js";
 const startServer = async () => {
   await connectDB();
 
+  if (Object.keys(config.missingOptionalFeatures).length > 0) {
+    for (const [feature, keys] of Object.entries(config.missingOptionalFeatures)) {
+      logger.warn(
+        `${feature} is not configured (missing: ${keys.join(", ")}). Related endpoints will return a clear 503 until this is set in .env.`
+      );
+    }
+  }
+
   const server = app.listen(config.port, () => {
     logger.info(`DermaCare API running in ${config.env} mode on port ${config.port}`);
   });

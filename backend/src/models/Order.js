@@ -53,16 +53,35 @@ const orderSchema = new mongoose.Schema(
     payment: {
       method: {
         type: String,
-        enum: ["cod", "card", "online"],
+        enum: ["cod", "bank_transfer", "khalti"],
         default: "cod",
       },
       status: {
         type: String,
-        enum: ["pending", "paid", "failed", "refunded"],
+        // pending: not yet paid. pending_verification: bank transfer proof
+        // submitted, awaiting admin review. paid/failed/refunded: final states.
+        enum: ["pending", "pending_verification", "paid", "failed", "refunded"],
         default: "pending",
       },
       transactionId: { type: String, default: null },
       paidAt: { type: Date, default: null },
+
+      // Khalti-specific: the payment identifier Khalti issues when a payment
+      // is initiated, used to look up its status afterward.
+      khaltiPidx: { type: String, default: null },
+
+      // Bank-transfer-specific
+      bankTransfer: {
+        referenceNumber: { type: String, default: null },
+        receipt: {
+          url: { type: String, default: null },
+          publicId: { type: String, default: null },
+        },
+        submittedAt: { type: Date, default: null },
+        verifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
+        verifiedAt: { type: Date, default: null },
+        rejectionReason: { type: String, default: null },
+      },
     },
   },
   { timestamps: true }

@@ -11,7 +11,7 @@ export const createOrderSchema = z.object({
     postalCode: z.string().trim().min(1),
     country: z.string().trim().min(1),
   }),
-  paymentMethod: z.enum(["cod", "card", "online"]).default("cod"),
+  paymentMethod: z.enum(["cod", "bank_transfer", "khalti"]).default("cod"),
 });
 
 export const updateOrderStatusSchema = z.object({

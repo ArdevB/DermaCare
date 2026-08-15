@@ -12,10 +12,11 @@ import { notFoundHandler, errorHandler } from "./middleware/errorHandler.js";
 
 import authRoutes from "./routes/authRoute.js";
 import productRoutes from "./routes/productRoute.js";
-import categoryRoutes from "./routes/categoryRoutes.js";
-import favouriteRoutes from "./routes/favouriteRoutes.js";
+import categoryRoutes from "./routes/categoryRoute.js";
+import favouriteRoutes from "./routes/favouriteRoute.js";
 import cartRoutes from "./routes/cartRoute.js";
-import orderRoutes from "./routes/orderRoutes.js";
+import orderRoutes from "./routes/orderRoute.js";
+import paymentRoutes from "./routes/paymentRoute.js";
 import userRoutes from "./routes/userRoute.js";
 
 const app = express();
@@ -55,6 +56,7 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/favourites", favouriteRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/payments", paymentRoutes);
 app.use("/api/users", userRoutes);
 
 // --- 404 + centralized error handler (must be last) ---
