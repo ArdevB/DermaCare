@@ -4,10 +4,6 @@ import logger from "../utils/logger.js";
 import Order from "../models/Order.js";
 import { uploadImage } from "./cloudinaryService.js";
 
-// Strips any trailing slash so "https://x/api/v2" and "https://x/api/v2/"
-// both produce the same correctly-formed URL when a path is appended below -
-// a stray trailing slash here previously caused a literal "//epayment/..."
-// double slash, which Khalti's server 404s on.
 const khaltiBaseUrl = () => config.khalti.baseUrl.replace(/\/+$/, "");
 
 const assertKhaltiConfigured = () => {
