@@ -1,28 +1,38 @@
 import { Resend } from "resend";
 import config from "../config/config.js";
+import ApiError from "./ApiError.js";
 
-const resend = new Resend(config.emailApiKey);
+let resend = null;
+if (config.email.isConfigured) {
+  resend = new Resend(config.email.apiKey);
+}
 
 /**
  * @param {string} to
  * @param {{ subject: string, body: string }} options
  */
-const sentEmail = async (to, { subject, body }) => {
+const sendEmail = async (to, { subject, body }) => {
+  if (!config.email.isConfigured) {
+    // Fail loudly and immediately rather than letting `new Resend(undefined)`
+    // fail mysteriously deep inside the SDK.
+    throw new ApiError(
+      503,
+      "Email sending is not configured on this server. Set RESEND_API_KEY and EMAIL_FROM in .env."
+    );
+  }
+
   const { data, error } = await resend.emails.send({
-    from: "Acme <onboarding@resend.dev>",
+    from: config.email.from,
     to,
     subject,
     html: body,
   });
 
   if (error) {
-    throw {
-      statusCode: 502,
-      message: `Failed to send email: ${error.message}`,
-    };
+    throw ApiError.internal(`Failed to send email: ${error.message}`);
   }
 
   return data;
 };
 
-export default sentEmail;
+export default sendEmail;

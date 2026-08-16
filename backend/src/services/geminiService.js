@@ -5,50 +5,74 @@ import logger from "../utils/logger.js";
 
 const genAI = new GoogleGenerativeAI(config.gemini.apiKey);
 
+const cleanList = (arr) =>
+  Array.isArray(arr) ? arr.map((s) => String(s).trim()).filter(Boolean) : [];
+
 /**
- * Generates a product description from structured product facts only.
- * Explicitly instructed not to invent claims/ingredients/benefits that weren't provided,
- * per coding rule #24 ("do not invent unsupported product information").
+ * Generates a product description, features, and benefits together in one
+ * call (so tone stays consistent) from structured product facts only.
+ * Explicitly instructed not to invent claims/ingredients/benefits that
+ * weren't provided, per coding rule #24 ("do not invent unsupported product
+ * information"). Deliberately does NOT generate an ingredients list -
+ * ingredients are a factual/safety claim (allergens, actives), not marketing
+ * copy, and should not be fabricated by a model with no real knowledge of
+ * what's actually in the product.
  */
-export const generateProductDescription = async ({
+export const generateProductCopy = async ({
   name,
   brand,
   category,
   ingredients = [],
-  features = [],
-  benefits = [],
 }) => {
   try {
-    const model = genAI.getGenerativeModel({ model: config.gemini.model });
+    const model = genAI.getGenerativeModel({
+      model: config.gemini.model,
+      generationConfig: { responseMimeType: "application/json" },
+    });
 
-    const prompt = `Write a concise, appealing e-commerce product description (2-4 sentences, no headings, no markdown) for a skincare/personal-care product.
+    const prompt = `You are writing e-commerce marketing copy for a skincare/personal-care product.
 
 Product name: ${name}
 ${brand ? `Brand: ${brand}` : ""}
 ${category ? `Category: ${category}` : ""}
 ${ingredients.length ? `Key ingredients: ${ingredients.join(", ")}` : ""}
-${features.length ? `Features: ${features.join(", ")}` : ""}
-${benefits.length ? `Benefits: ${benefits.join(", ")}` : ""}
+
+Return ONLY a JSON object with this exact shape, no markdown fencing, no commentary:
+{
+  "description": "2-4 sentence product description, warm marketing tone",
+  "features": ["short feature phrase", "short feature phrase"],
+  "benefits": ["short benefit phrase", "short benefit phrase"]
+}
 
 Rules:
-- Only use the facts provided above. Do not invent ingredients, certifications, or medical claims.
-- Do not make medical or dermatological claims that are not explicitly listed.
-- Write naturally, in a warm marketing tone suitable for a skincare storefront.
-- Return only the description text, nothing else.`;
+- 3 to 5 items each for "features" and "benefits", each under 8 words.
+- Only use the facts provided above. Do not invent ingredients, certifications, or medical/dermatological claims.
+- "features" and "benefits" describe the product experience - do not just restate the ingredients list.`;
 
     const result = await model.generateContent(prompt);
-    const text = result.response.text().trim();
+    const raw = result.response.text().trim();
 
-    if (!text) {
-      throw new Error("Gemini returned an empty response");
+    let parsed;
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      throw new Error(`Gemini returned non-JSON output: ${raw.slice(0, 200)}`);
     }
 
-    return text;
+    const description = String(parsed.description || "").trim();
+    const features = cleanList(parsed.features);
+    const benefits = cleanList(parsed.benefits);
+
+    if (!description) {
+      throw new Error("Gemini returned an empty description");
+    }
+
+    return { description, features, benefits };
   } catch (error) {
-    logger.error(`Gemini description generation failed: ${error.message}`);
-    // Per requirement: never silently save an empty description on failure — surface a clear error.
+    logger.error(`Gemini product copy generation failed: ${error.message}`);
     throw ApiError.internal(
-      "Failed to auto-generate product description. Please provide one manually or try again."
+      "Failed to auto-generate product copy. Please provide description/features/benefits manually or try again."
     );
   }
 };
+

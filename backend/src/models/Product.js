@@ -59,7 +59,15 @@ const productSchema = new mongoose.Schema(
       default: {},
     },
     features: [{ type: String, trim: true }],
+    featuresGeneratedByAI: {
+      type: Boolean,
+      default: false,
+    },
     benefits: [{ type: String, trim: true }],
+    benefitsGeneratedByAI: {
+      type: Boolean,
+      default: false,
+    },
     ratings: {
       average: { type: Number, default: 0, min: 0, max: 5 },
       count: { type: Number, default: 0 },

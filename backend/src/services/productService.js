@@ -2,7 +2,7 @@ import Product from "../models/Product.js";
 import Category from "../models/Category.js";
 import ApiError from "../utils/ApiError.js";
 import logger from "../utils/logger.js";
-import { generateProductDescription } from "./geminiService.js";
+import { generateProductCopy } from "./geminiService.js";
 import { uploadImages, deleteImages } from "./cloudinaryService.js";
 
 const isBlank = (str) => str === undefined || str === null || String(str).trim() === "";
@@ -53,26 +53,46 @@ export const getProductById = async (id) => {
   return product;
 };
 
+const isEmptyList = (arr) => !Array.isArray(arr) || arr.length === 0;
+
 export const createProduct = async (data, files = []) => {
   const category = await Category.findById(data.category);
   if (!category) {
     throw ApiError.badRequest("Category does not exist.");
   }
 
-  let { description } = data;
+  let { description, features, benefits } = data;
   let descriptionGeneratedByAI = false;
+  let featuresGeneratedByAI = false;
+  let benefitsGeneratedByAI = false;
 
-  // Gemini is called only when the description is missing/empty/whitespace-only.
-  if (isBlank(description)) {
-    description = await generateProductDescription({
+  const needsDescription = isBlank(description);
+  const needsFeatures = isEmptyList(features);
+  const needsBenefits = isEmptyList(benefits);
+
+  // One combined Gemini call covers whichever of the three are blank, so
+  // description/features/benefits stay consistent in tone rather than being
+  // generated independently across separate calls.
+  if (needsDescription || needsFeatures || needsBenefits) {
+    const generated = await generateProductCopy({
       name: data.name,
       brand: data.brand,
       category: category.name,
       ingredients: data.ingredients || [],
-      features: data.features || [],
-      benefits: data.benefits || [],
     });
-    descriptionGeneratedByAI = true;
+
+    if (needsDescription) {
+      description = generated.description;
+      descriptionGeneratedByAI = true;
+    }
+    if (needsFeatures) {
+      features = generated.features;
+      featuresGeneratedByAI = true;
+    }
+    if (needsBenefits) {
+      benefits = generated.benefits;
+      benefitsGeneratedByAI = true;
+    }
   }
 
   let images = [];
@@ -84,6 +104,10 @@ export const createProduct = async (data, files = []) => {
     ...data,
     description,
     descriptionGeneratedByAI,
+    features,
+    featuresGeneratedByAI,
+    benefits,
+    benefitsGeneratedByAI,
     images,
   });
 
@@ -104,29 +128,46 @@ export const updateProduct = async (id, data, files = []) => {
     }
   }
 
-  // description handling:
-  // - key not sent at all  -> leave existing description untouched, no Gemini call
-  // - key sent but blank   -> treat as "removed", regenerate via Gemini
+  // description/features/benefits handling, each independently:
+  // - key not sent at all  -> leave existing value untouched, no Gemini call
+  // - key sent but blank/empty -> treat as "removed", regenerate via Gemini
   // - key sent with content -> use as-is, no Gemini call
-  if (Object.prototype.hasOwnProperty.call(data, "description")) {
-    if (isBlank(data.description)) {
-      const categoryDoc = data.category
-        ? await Category.findById(data.category)
-        : await Category.findById(product.category);
+  const sentDescription = Object.prototype.hasOwnProperty.call(data, "description");
+  const sentFeatures = Object.prototype.hasOwnProperty.call(data, "features");
+  const sentBenefits = Object.prototype.hasOwnProperty.call(data, "benefits");
 
-      data.description = await generateProductDescription({
-        name: data.name || product.name,
-        brand: data.brand !== undefined ? data.brand : product.brand,
-        category: categoryDoc?.name,
-        ingredients: data.ingredients || product.ingredients,
-        features: data.features || product.features,
-        benefits: data.benefits || product.benefits,
-      });
+  const needsDescription = sentDescription && isBlank(data.description);
+  const needsFeatures = sentFeatures && isEmptyList(data.features);
+  const needsBenefits = sentBenefits && isEmptyList(data.benefits);
+
+  if (needsDescription || needsFeatures || needsBenefits) {
+    const categoryDoc = data.category
+      ? await Category.findById(data.category)
+      : await Category.findById(product.category);
+
+    const generated = await generateProductCopy({
+      name: data.name || product.name,
+      brand: data.brand !== undefined ? data.brand : product.brand,
+      category: categoryDoc?.name,
+      ingredients: data.ingredients || product.ingredients,
+    });
+
+    if (needsDescription) {
+      data.description = generated.description;
       data.descriptionGeneratedByAI = true;
-    } else {
-      data.descriptionGeneratedByAI = false;
+    }
+    if (needsFeatures) {
+      data.features = generated.features;
+      data.featuresGeneratedByAI = true;
+    }
+    if (needsBenefits) {
+      data.benefits = generated.benefits;
+      data.benefitsGeneratedByAI = true;
     }
   }
+  if (sentDescription && !needsDescription) data.descriptionGeneratedByAI = false;
+  if (sentFeatures && !needsFeatures) data.featuresGeneratedByAI = false;
+  if (sentBenefits && !needsBenefits) data.benefitsGeneratedByAI = false;
 
   if (files.length > 0) {
     const newImages = await uploadImages(files);
