@@ -7,7 +7,9 @@ import mongoSanitize from "express-mongo-sanitize";
 import rateLimit from "express-rate-limit";
 
 import config from "./config/config.js";
+import connectDB from "./config/db.js";
 import logger from "./utils/logger.js";
+
 import { notFoundHandler, errorHandler } from "./middleware/errorHandler.js";
 
 import authRoutes from "./routes/authRoute.js";
@@ -21,30 +23,41 @@ import userRoutes from "./routes/userRoute.js";
 
 const app = express();
 
-// --- Security & core middleware ---
+// Connect MongoDB
+connectDB();
+
+// Security & core middleware
 app.use(helmet());
 app.use(cors(config.cors));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(cookieParser());
-app.use(mongoSanitize()); // strips $ and . operators from user input to prevent NoSQL injection
+app.use(mongoSanitize());
 
+// Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 300,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { success: false, message: "Too many requests, please try again later." },
+  message: {
+    success: false,
+    message: "Too many requests, please try again later.",
+  },
 });
+
 app.use("/api", limiter);
 
+// Logger
 app.use(
   morgan("combined", {
-    stream: { write: (message) => logger.info(message.trim()) },
+    stream: {
+      write: (message) => logger.info(message.trim()),
+    },
   })
 );
 
-// --- Default route ---
+// Default route
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
@@ -53,12 +66,16 @@ app.get("/", (req, res) => {
   });
 });
 
-// --- Health check ---
+// Health check
 app.get("/api/health", (req, res) => {
-  res.status(200).json({ success: true, message: "DermaCare API is running", env: config.env });
+  res.status(200).json({
+    success: true,
+    message: "DermaCare API is running",
+    env: config.env,
+  });
 });
 
-// --- Routes ---
+// API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
@@ -68,7 +85,17 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/users", userRoutes);
 
+// Error handling
 app.use(notFoundHandler);
 app.use(errorHandler);
+
+// Local server
+if (!process.env.VERCEL) {
+  app.listen(config.port, () => {
+    logger.info(
+      `DermaCare API running in ${config.env} mode on port ${config.port}`
+    );
+  });
+}
 
 export default app;
