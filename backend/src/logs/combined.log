@@ -456,3 +456,5 @@
 {"level":"info","message":"::1 - - [16/Aug/2026:04:56:39 +0000] \"POST /api/auth/login HTTP/1.1\" 200 514 \"-\" \"PostmanRuntime/7.56.1\"","timestamp":"2026-08-16T04:56:39.206Z"}
 {"level":"info","message":"Product created: Maybelline Lash Sensational Sky High Washable Mascara (6a814368217d8224c59246c5)","timestamp":"2026-08-16T04:58:16.290Z"}
 {"level":"info","message":"::1 - - [16/Aug/2026:04:58:16 +0000] \"POST /api/products HTTP/1.1\" 201 1238 \"-\" \"PostmanRuntime/7.56.1\"","timestamp":"2026-08-16T04:58:16.299Z"}
+{"level":"info","message":"MongoDB connected: ac-rxjokgl-shard-00-00.rok2ydf.mongodb.net","timestamp":"2026-08-16T05:02:20.882Z"}
+{"level":"info","message":"DermaCare API running in development mode on port 5000","timestamp":"2026-08-16T05:02:20.890Z"}
