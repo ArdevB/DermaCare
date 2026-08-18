@@ -44,6 +44,15 @@ app.use(
   })
 );
 
+// --- Default route ---
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Welcome to DermaCare API",
+    status: "running",
+  });
+});
+
 // --- Health check ---
 app.get("/api/health", (req, res) => {
   res.status(200).json({ success: true, message: "DermaCare API is running", env: config.env });
@@ -59,7 +68,6 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/users", userRoutes);
 
-// --- 404 + centralized error handler (must be last) ---
 app.use(notFoundHandler);
 app.use(errorHandler);
 

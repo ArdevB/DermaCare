@@ -458,3 +458,18 @@
 {"level":"info","message":"::1 - - [16/Aug/2026:04:58:16 +0000] \"POST /api/products HTTP/1.1\" 201 1238 \"-\" \"PostmanRuntime/7.56.1\"","timestamp":"2026-08-16T04:58:16.299Z"}
 {"level":"info","message":"MongoDB connected: ac-rxjokgl-shard-00-00.rok2ydf.mongodb.net","timestamp":"2026-08-16T05:02:20.882Z"}
 {"level":"info","message":"DermaCare API running in development mode on port 5000","timestamp":"2026-08-16T05:02:20.890Z"}
+{"level":"info","message":"MongoDB connected: ac-rxjokgl-shard-00-00.rok2ydf.mongodb.net","timestamp":"2026-08-18T14:04:03.596Z"}
+{"level":"info","message":"DermaCare API running in development mode on port 5000","timestamp":"2026-08-18T14:04:03.606Z"}
+{"level":"info","message":"::1 - - [18/Aug/2026:14:05:11 +0000] \"GET /api/products/ HTTP/1.1\" 200 5366 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36\"","timestamp":"2026-08-18T14:05:11.632Z"}
+{"level":"warn","message":"Route not found: GET /favicon.ico - GET /favicon.ico","timestamp":"2026-08-18T14:05:12.234Z"}
+{"level":"info","message":"::1 - - [18/Aug/2026:14:05:12 +0000] \"GET /favicon.ico HTTP/1.1\" 404 1336 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36\"","timestamp":"2026-08-18T14:05:12.237Z"}
+{"level":"info","message":"MongoDB connected: ac-rxjokgl-shard-00-00.rok2ydf.mongodb.net","timestamp":"2026-08-18T14:06:29.452Z"}
+{"level":"info","message":"DermaCare API running in development mode on port 5000","timestamp":"2026-08-18T14:06:29.469Z"}
+{"level":"info","message":"MongoDB connected: ac-rxjokgl-shard-00-00.rok2ydf.mongodb.net","timestamp":"2026-08-18T14:06:43.171Z"}
+{"level":"info","message":"DermaCare API running in development mode on port 5000","timestamp":"2026-08-18T14:06:43.182Z"}
+{"level":"info","message":"MongoDB connected: ac-rxjokgl-shard-00-00.rok2ydf.mongodb.net","timestamp":"2026-08-18T14:06:45.641Z"}
+{"level":"info","message":"DermaCare API running in development mode on port 5000","timestamp":"2026-08-18T14:06:45.650Z"}
+{"level":"info","message":"::1 - - [18/Aug/2026:14:06:49 +0000] \"GET / HTTP/1.1\" 200 95 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36\"","timestamp":"2026-08-18T14:06:49.585Z"}
+{"level":"info","message":"MongoDB connected: ac-rxjokgl-shard-00-00.rok2ydf.mongodb.net","timestamp":"2026-08-18T14:07:06.902Z"}
+{"level":"info","message":"DermaCare API running in development mode on port 5000","timestamp":"2026-08-18T14:07:06.914Z"}
+{"level":"info","message":"::1 - - [18/Aug/2026:14:07:07 +0000] \"GET / HTTP/1.1\" 200 72 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36\"","timestamp":"2026-08-18T14:07:07.164Z"}
