@@ -9,7 +9,7 @@ const khaltiBaseUrl = () => config.khalti.baseUrl.replace(/\/+$/, "");
 const assertKhaltiConfigured = () => {
   if (!config.khalti.isConfigured) {
     throw ApiError.internal(
-      "Khalti payments are unavailable: KHALTI_SECRET_KEY is not configured on the server."
+      "Khalti payments are unavailable: KHALTI_SECRET_KEY is not configured on the server.",
     );
   }
 };
@@ -37,7 +37,7 @@ export const initiateKhaltiPayment = async (orderId, user) => {
 
   if (order.payment.method !== "khalti") {
     throw ApiError.badRequest(
-      `This order's payment method is '${order.payment.method}', not khalti.`
+      `This order's payment method is '${order.payment.method}', not khalti.`,
     );
   }
   if (order.payment.status === "paid") {
@@ -71,7 +71,9 @@ export const initiateKhaltiPayment = async (orderId, user) => {
     });
   } catch (error) {
     logger.error(`Khalti initiate request failed: ${error.message}`);
-    throw ApiError.internal("Could not reach Khalti. Please try again shortly.");
+    throw ApiError.internal(
+      "Could not reach Khalti. Please try again shortly.",
+    );
   }
 
   // Read the body as raw text first so a non-JSON response (e.g. an HTML
@@ -87,17 +89,20 @@ export const initiateKhaltiPayment = async (orderId, user) => {
 
   if (!response.ok || !data?.payment_url) {
     logger.error(
-      `Khalti initiate failed (${response.status}) for URL ${initiateUrl}. Raw response: ${rawBody?.slice(0, 500)}`
+      `Khalti initiate failed (${response.status}) for URL ${initiateUrl}. Raw response: ${rawBody?.slice(0, 500)}`,
     );
     throw ApiError.internal(
-      data?.detail || `Khalti request failed with status ${response.status}. Check server logs for the raw response body.`
+      data?.detail ||
+        `Khalti request failed with status ${response.status}. Check server logs for the raw response body.`,
     );
   }
 
   order.payment.khaltiPidx = data.pidx;
   await order.save();
 
-  logger.info(`Khalti payment initiated for order ${order.orderNumber} (pidx: ${data.pidx})`);
+  logger.info(
+    `Khalti payment initiated for order ${order.orderNumber} (pidx: ${data.pidx})`,
+  );
   return { paymentUrl: data.payment_url, pidx: data.pidx };
 };
 
@@ -128,7 +133,7 @@ export const verifyKhaltiPayment = async (pidx) => {
   } catch (error) {
     logger.error(`Khalti lookup request failed: ${error.message}`);
     throw ApiError.internal(
-      "Could not reach Khalti to verify this payment. Please try again shortly."
+      "Could not reach Khalti to verify this payment. Please try again shortly.",
     );
   }
 
@@ -142,7 +147,7 @@ export const verifyKhaltiPayment = async (pidx) => {
 
   if (!response.ok || !data?.status) {
     logger.error(
-      `Khalti lookup failed (${response.status}) for URL ${lookupUrl}. Raw response: ${rawBody?.slice(0, 500)}`
+      `Khalti lookup failed (${response.status}) for URL ${lookupUrl}. Raw response: ${rawBody?.slice(0, 500)}`,
     );
     throw ApiError.internal("Failed to verify Khalti payment status.");
   }
@@ -159,16 +164,23 @@ export const verifyKhaltiPayment = async (pidx) => {
 
   await order.save();
 
-  logger.info(`Khalti payment checked for order ${order.orderNumber}: ${data.status}`);
+  logger.info(
+    `Khalti payment checked for order ${order.orderNumber}: ${data.status}`,
+  );
   return { order, khaltiStatus: data.status };
 };
 
-export const submitBankTransferProof = async (orderId, user, { referenceNumber }, file) => {
+export const submitBankTransferProof = async (
+  orderId,
+  user,
+  { referenceNumber },
+  file,
+) => {
   const order = await getOwnedOrder(orderId, user);
 
   if (order.payment.method !== "bank_transfer") {
     throw ApiError.badRequest(
-      `This order's payment method is '${order.payment.method}', not bank_transfer.`
+      `This order's payment method is '${order.payment.method}', not bank_transfer.`,
     );
   }
   if (order.payment.status === "paid") {
@@ -195,7 +207,11 @@ export const submitBankTransferProof = async (orderId, user, { referenceNumber }
   return order;
 };
 
-export const verifyBankTransferPayment = async (orderId, { decision, rejectionReason }, adminUser) => {
+export const verifyBankTransferPayment = async (
+  orderId,
+  { decision, rejectionReason },
+  adminUser,
+) => {
   const order = await Order.findById(orderId);
   if (!order) throw ApiError.notFound("Order not found.");
 
@@ -203,7 +219,9 @@ export const verifyBankTransferPayment = async (orderId, { decision, rejectionRe
     throw ApiError.badRequest("This order is not a bank transfer payment.");
   }
   if (order.payment.status !== "pending_verification") {
-    throw ApiError.badRequest(`Cannot verify a payment in '${order.payment.status}' status.`);
+    throw ApiError.badRequest(
+      `Cannot verify a payment in '${order.payment.status}' status.`,
+    );
   }
 
   if (decision === "approve") {
@@ -218,6 +236,8 @@ export const verifyBankTransferPayment = async (orderId, { decision, rejectionRe
   order.payment.bankTransfer.verifiedAt = new Date();
 
   await order.save();
-  logger.info(`Bank transfer for order ${order.orderNumber} ${decision}d by ${adminUser.email}`);
+  logger.info(
+    `Bank transfer for order ${order.orderNumber} ${decision}d by ${adminUser.email}`,
+  );
   return order;
 };

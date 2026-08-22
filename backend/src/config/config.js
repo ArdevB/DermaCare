@@ -72,7 +72,7 @@ const config = {
 
   // Used to build links that go out in emails (verify/reset) and to build
   // the Khalti return_url/website_url for its payment redirect flow.
-  frontendUrl: process.env.FRONTEND_URL || "http://localhost:5173",
+  frontendUrl: process.env.FRONTEND_URL || "",
 
   cors: {
     origin: process.env.CORS_ORIGIN

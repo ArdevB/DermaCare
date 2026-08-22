@@ -20,6 +20,7 @@ import cartRoutes from "./routes/cartRoute.js";
 import orderRoutes from "./routes/orderRoute.js";
 import paymentRoutes from "./routes/paymentRoute.js";
 import userRoutes from "./routes/userRoute.js";
+import reviewRoutes from "./routes/reviewRoute.js";
 
 const app = express();
 
@@ -54,7 +55,7 @@ app.use(
     stream: {
       write: (message) => logger.info(message.trim()),
     },
-  })
+  }),
 );
 
 // Default route
@@ -84,6 +85,7 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 // Error handling
 app.use(notFoundHandler);
@@ -93,7 +95,7 @@ app.use(errorHandler);
 if (!process.env.VERCEL) {
   app.listen(config.port, () => {
     logger.info(
-      `DermaCare API running in ${config.env} mode on port ${config.port}`
+      `DermaCare API running in ${config.env} mode on port ${config.port}`,
     );
   });
 }
