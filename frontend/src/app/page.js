@@ -11,6 +11,7 @@ import {
   StaggerGrid,
   StaggerItem,
 } from "@/components/shop/FadeInSection";
+import BrandSlider from "@/components/BrandSlider";
 
 const CATEGORY_TILES = [
   {
@@ -141,6 +142,9 @@ const Home = () => {
         </FadeInSection>
         <BrandCarousel />
       </section>
+
+      {/*Brand Slider */}
+      <BrandSlider />
 
       {/* Testimonials */}
       <Testimonials />

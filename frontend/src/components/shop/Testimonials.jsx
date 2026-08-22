@@ -8,21 +8,21 @@ import { FadeInSection, StaggerGrid, StaggerItem } from "@/components/shop/FadeI
 // reviews coming in (or pull your highest-rated product reviews here).
 const TESTIMONIALS = [
   {
-    name: "Aarati Shrestha",
+    name: "User 1",
     role: "Verified Customer",
     rating: 5,
     quote:
       "My skin has never felt this balanced. The night cream absorbs fast and I actually see a difference after two weeks.",
   },
   {
-    name: "Priya Gurung",
+    name: "User 2",
     role: "Verified Customer",
     rating: 5,
     quote:
       "Fast delivery and the packaging was so carefully done. Everything arrived safe and the products feel premium.",
   },
   {
-    name: "Sanjana Karki",
+    name: "User 3",
     role: "Verified Customer",
     rating: 4,
     quote:
