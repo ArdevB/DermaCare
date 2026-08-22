@@ -1,9 +1,5 @@
-import React from 'react'
+import { CategoryPage } from "@/components/shop/CategoryPage";
 
-const bodycare = () => {
-  return (
-    <div>bodycare</div>
-  )
+export default function BodycarePage() {
+  return <CategoryPage title="BodyCare" keyword="bodycare" />;
 }
-
-export default bodycare
