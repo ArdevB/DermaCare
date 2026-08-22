@@ -15,16 +15,14 @@ export function CategoryPage({ title, keyword }) {
   const { categories, isLoading: categoriesLoading } = usePublicCategories();
 
   const matchedCategory = categories.find((c) =>
-    c.name.toLowerCase().replace(/\s+/g, "").includes(keyword.toLowerCase()),
+    c.name.toLowerCase().replace(/\s+/g, "").includes(keyword.toLowerCase())
   );
 
   // Only query products once we know which category (if any) matched -
   // avoids fetching an unfiltered product list we'd just discard.
   const { data, isLoading, error } = useApiQuery(
     matchedCategory ? "/products" : null,
-    matchedCategory
-      ? { category: matchedCategory._id, page, limit: 12 }
-      : undefined,
+    matchedCategory ? { category: matchedCategory._id, page, limit: 12 } : undefined
   );
 
   const products = data?.products ?? [];
@@ -36,16 +34,13 @@ export function CategoryPage({ title, keyword }) {
       <div className="container mx-auto px-6 py-8">
         <h1 className="text-2xl font-semibold text-gray-900">{title}</h1>
         {matchedCategory?.description && (
-          <p className="mt-1 text-sm text-gray-500">
-            {matchedCategory.description}
-          </p>
+          <p className="mt-1 text-sm text-gray-500">{matchedCategory.description}</p>
         )}
 
         <div className="mt-6">
           {noMatchingCategory ? (
             <div className="rounded-xl border bg-white p-12 text-center text-sm text-gray-400">
-              No &ldquo;{title}&rdquo; category has been set up yet. Check back
-              soon, or{" "}
+              No &ldquo;{title}&rdquo; category has been set up yet. Check back soon, or{" "}
               <a href="/search" className="text-pink-500 hover:underline">
                 browse all products
               </a>

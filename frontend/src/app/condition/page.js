@@ -1,10 +1,9 @@
-import React from 'react'
+import React from "react";
 
 const terms = () => {
   return (
     <main className="min-h-screen bg-[#f8f8ff] py-16">
       <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-10">
-
         {/* ================= HEADER ================= */}
         <div className="text-center mb-14">
           <h1 className="text-4xl md:text-5xl font-bold text-pink-600">
@@ -29,16 +28,16 @@ const terms = () => {
           </p>
 
           <p className="text-gray-700 leading-7 mb-4">
-            You may access our Website from a computer, mobile phone, tablet,
-            or other device. These Terms of Use govern your use of our Website,
+            You may access our Website from a computer, mobile phone, tablet, or
+            other device. These Terms of Use govern your use of our Website,
             services, features, and content regardless of the means of access.
           </p>
 
           <p className="text-gray-700 leading-7">
-            The Website is intended for your personal and non-commercial use
-            and information. Your use of the Website and its services is
-            governed by these Terms of Use together with our Privacy Notice,
-            Shipping Policy, and Cancellation, Refund & Return Policy.
+            The Website is intended for your personal and non-commercial use and
+            information. Your use of the Website and its services is governed by
+            these Terms of Use together with our Privacy Notice, Shipping
+            Policy, and Cancellation, Refund & Return Policy.
           </p>
         </section>
 
@@ -57,8 +56,8 @@ const terms = () => {
 
           <p>
             You are responsible for ensuring that your use of the Website and
-            the materials available through it complies with all applicable
-            laws and regulations.
+            the materials available through it complies with all applicable laws
+            and regulations.
           </p>
         </TermsSection>
 
@@ -71,8 +70,8 @@ const terms = () => {
 
           <p>
             Any updated version will be posted on the Website along with the
-            updated date. Changes will become effective when they are posted
-            on the Website.
+            updated date. Changes will become effective when they are posted on
+            the Website.
           </p>
 
           <p>
@@ -91,14 +90,13 @@ const terms = () => {
           <p>
             We understand the importance of protecting your personal
             information. Dermacare has established a Privacy Notice explaining
-            how personal information is collected, used, stored, and
-            protected.
+            how personal information is collected, used, stored, and protected.
           </p>
 
           <p>
-            Your use of the Website is also governed by our Privacy Notice.
-            By continuing to use the Website, you acknowledge that you have
-            read and accepted the Privacy Notice.
+            Your use of the Website is also governed by our Privacy Notice. By
+            continuing to use the Website, you acknowledge that you have read
+            and accepted the Privacy Notice.
           </p>
 
           <p>
@@ -126,9 +124,9 @@ const terms = () => {
           </p>
 
           <p>
-            The information you provide to Dermacare must be accurate,
-            complete, and current. You should notify us if any of your
-            information changes.
+            The information you provide to Dermacare must be accurate, complete,
+            and current. You should notify us if any of your information
+            changes.
           </p>
 
           <p>
@@ -158,9 +156,9 @@ const terms = () => {
           </p>
 
           <p>
-            Product images are provided for illustrative purposes and may
-            differ slightly from the actual product because of lighting,
-            photography, screen settings, packaging changes, or other factors.
+            Product images are provided for illustrative purposes and may differ
+            slightly from the actual product because of lighting, photography,
+            screen settings, packaging changes, or other factors.
           </p>
 
           <p>
@@ -211,24 +209,24 @@ const terms = () => {
           </p>
 
           <p>
-            Such recommendations do not constitute medical advice,
-            professional diagnosis, or a guarantee that a particular product
-            will be suitable for every individual.
+            Such recommendations do not constitute medical advice, professional
+            diagnosis, or a guarantee that a particular product will be suitable
+            for every individual.
           </p>
 
           <p>
             Customers should consider their individual skin type, allergies,
-            sensitivities, and other personal circumstances before purchasing
-            or using a product.
+            sensitivities, and other personal circumstances before purchasing or
+            using a product.
           </p>
         </TermsSection>
 
         {/* ================= LICENSE ================= */}
         <TermsSection title="8. LIMITED LICENSE">
           <p>
-            Dermacare grants you a limited, non-exclusive,
-            non-transferable, and non-sublicensable license to access and use
-            the Website for personal and non-commercial purposes.
+            Dermacare grants you a limited, non-exclusive, non-transferable, and
+            non-sublicensable license to access and use the Website for personal
+            and non-commercial purposes.
           </p>
 
           <p>
@@ -251,26 +249,26 @@ const terms = () => {
         {/* ================= ORDERS ================= */}
         <TermsSection title="9. ORDERS & PAYMENTS">
           <p>
-            When you place an order through the Dermacare Website, you agree
-            to provide accurate and complete information.
+            When you place an order through the Dermacare Website, you agree to
+            provide accurate and complete information.
           </p>
 
           <p>
             Placing an order does not necessarily guarantee acceptance of the
-            order. Dermacare reserves the right to accept, reject, or cancel
-            an order where necessary.
+            order. Dermacare reserves the right to accept, reject, or cancel an
+            order where necessary.
           </p>
 
           <p>
             Orders may be cancelled if a product is unavailable, pricing or
-            product information contains an error, payment cannot be
-            confirmed, or the order does not comply with our Website policies.
+            product information contains an error, payment cannot be confirmed,
+            or the order does not comply with our Website policies.
           </p>
 
           <p>
             If Dermacare cancels a prepaid order, any applicable refund will be
-            processed through the appropriate payment method within a
-            reasonable period.
+            processed through the appropriate payment method within a reasonable
+            period.
           </p>
         </TermsSection>
 
@@ -317,8 +315,8 @@ const terms = () => {
 
           <p>
             After reviewing the issue, Dermacare may arrange a replacement,
-            return, or applicable refund in accordance with our Refund &
-            Return Policy.
+            return, or applicable refund in accordance with our Refund & Return
+            Policy.
           </p>
 
           <SubTitle>Other Returns</SubTitle>
@@ -358,24 +356,23 @@ const terms = () => {
         <TermsSection title="12. REFUND PROCESS">
           <p>
             Where a refund is approved, the refund will generally be processed
-            through the original payment method or another method agreed upon
-            by Dermacare and the customer.
+            through the original payment method or another method agreed upon by
+            Dermacare and the customer.
           </p>
 
           <p>
-            The time required for the refund to appear in the customer's
-            account may depend on the payment provider or financial
-            institution.
+            The time required for the refund to appear in the customer's account
+            may depend on the payment provider or financial institution.
           </p>
         </TermsSection>
 
         {/* ================= CANCELLATION ================= */}
         <TermsSection title="13. CANCELLATION OF ORDERS">
           <p>
-            Dermacare reserves the right to cancel an order where we are
-            unable to fulfill the order, the requested product is unavailable,
-            payment cannot be verified, the order violates Website policies,
-            or other circumstances prevent us from completing the transaction.
+            Dermacare reserves the right to cancel an order where we are unable
+            to fulfill the order, the requested product is unavailable, payment
+            cannot be verified, the order violates Website policies, or other
+            circumstances prevent us from completing the transaction.
           </p>
 
           <p>
@@ -389,8 +386,7 @@ const terms = () => {
         <TermsSection title="14. DISCLAIMER OF WARRANTY">
           <p>
             The Website and its content are provided on an “as is” and “as
-            available” basis to the fullest extent permitted by applicable
-            law.
+            available” basis to the fullest extent permitted by applicable law.
           </p>
 
           <p>
@@ -407,17 +403,17 @@ const terms = () => {
         {/* ================= LIMITATION ================= */}
         <TermsSection title="15. LIMITATION OF LIABILITY">
           <p>
-            To the fullest extent permitted by applicable law, Dermacare,
-            Seven Multi Trading Pvt. Ltd., its employees, directors, partners,
-            affiliates, service providers, and licensors will not be liable
-            for indirect, incidental, special, consequential, or punitive
-            damages arising from your use of the Website.
+            To the fullest extent permitted by applicable law, Dermacare, Seven
+            Multi Trading Pvt. Ltd., its employees, directors, partners,
+            affiliates, service providers, and licensors will not be liable for
+            indirect, incidental, special, consequential, or punitive damages
+            arising from your use of the Website.
           </p>
 
           <p>
-            This may include losses resulting from Website interruptions,
-            access delays, technical failures, data loss, third-party links,
-            viruses, inaccuracies, or events beyond our reasonable control.
+            This may include losses resulting from Website interruptions, access
+            delays, technical failures, data loss, third-party links, viruses,
+            inaccuracies, or events beyond our reasonable control.
           </p>
 
           <p>
@@ -435,9 +431,9 @@ const terms = () => {
           </p>
 
           <p>
-            These links are provided for convenience. Dermacare does not
-            control and is not responsible for the content, security, or
-            privacy practices of third-party websites.
+            These links are provided for convenience. Dermacare does not control
+            and is not responsible for the content, security, or privacy
+            practices of third-party websites.
           </p>
 
           <p>
@@ -453,9 +449,7 @@ const terms = () => {
             Dermacare.
           </p>
 
-          <p>
-            You may stop using the Website at any time.
-          </p>
+          <p>You may stop using the Website at any time.</p>
 
           <p>
             Dermacare may suspend or terminate your access to the Website,
@@ -474,9 +468,9 @@ const terms = () => {
         <TermsSection title="18. INDEMNITY">
           <p>
             You agree to defend, indemnify, and hold harmless Dermacare, Seven
-            Multi Trading Pvt. Ltd., its employees, directors, officers,
-            agents, affiliates, partners, and service providers from claims,
-            losses, liabilities, damages, costs, and expenses arising from:
+            Multi Trading Pvt. Ltd., its employees, directors, officers, agents,
+            affiliates, partners, and service providers from claims, losses,
+            liabilities, damages, costs, and expenses arising from:
           </p>
 
           <BulletList
@@ -491,8 +485,8 @@ const terms = () => {
           />
 
           <p>
-            This provision will survive the termination or expiry of these
-            Terms to the extent permitted by applicable law.
+            This provision will survive the termination or expiry of these Terms
+            to the extent permitted by applicable law.
           </p>
         </TermsSection>
 
@@ -504,9 +498,7 @@ const terms = () => {
           </p>
 
           <div className="mt-6 bg-pink-50 border border-pink-100 rounded-xl p-6">
-            <p className="font-semibold text-gray-800 mb-2">
-              Dermacare
-            </p>
+            <p className="font-semibold text-gray-800 mb-2">Dermacare</p>
 
             <p className="text-gray-700">
               <strong>Operated by:</strong> Seven Multi Trading Pvt. Ltd.
@@ -534,16 +526,14 @@ const terms = () => {
 
           <p className="text-gray-600 max-w-2xl mx-auto leading-7">
             By using our Website, you agree to follow these Terms of Use and
-            help us maintain a safe, reliable, and enjoyable shopping
-            experience for everyone.
+            help us maintain a safe, reliable, and enjoyable shopping experience
+            for everyone.
           </p>
         </div>
-
       </div>
     </main>
   );
-}
-
+};
 
 // /* =====================================================
 //    REUSABLE TERMS SECTION
@@ -552,19 +542,14 @@ const terms = () => {
 function TermsSection({ title, children }) {
   return (
     <section className="bg-white rounded-2xl shadow-sm p-6 md:p-10 mb-8">
-
       <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-6 pb-3 border-b border-pink-100">
         {title}
       </h2>
 
-      <div className="space-y-4 text-gray-700 leading-7">
-        {children}
-      </div>
-
+      <div className="space-y-4 text-gray-700 leading-7">{children}</div>
     </section>
   );
 }
-
 
 // /* =====================================================
 //    REUSABLE SUBTITLE
@@ -572,14 +557,9 @@ function TermsSection({ title, children }) {
 
 function SubTitle({ children }) {
   return (
-    <h3 className="text-lg font-semibold text-pink-600 pt-4">
-      {children}
-    </h3>
+    <h3 className="text-lg font-semibold text-pink-600 pt-4">{children}</h3>
   );
 }
-
-
-
 
 function BulletList({ items }) {
   return (
@@ -591,4 +571,4 @@ function BulletList({ items }) {
   );
 }
 
-export default terms
+export default terms;

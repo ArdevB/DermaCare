@@ -3,14 +3,7 @@
 import { ProductCard } from "@/components/shop/ProductCard";
 import { PaginationBar } from "@/components/admin/PaginationBar";
 
-export function ProductGrid({
-  products,
-  pagination,
-  isLoading,
-  isError,
-  onPageChange,
-  emptyMessage,
-}) {
+export function ProductGrid({ products, pagination, isLoading, isError, onPageChange, emptyMessage }) {
   if (isError) {
     return (
       <div className="rounded-xl border bg-white p-8 text-center text-sm text-red-500">

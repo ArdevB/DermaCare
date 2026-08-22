@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Heart, ShoppingCart, ImageOff } from "lucide-react";
+import { Heart, ShoppingCart, ImageOff, Star } from "lucide-react";
 import { useShop } from "@/hooks/useShop";
 import { getErrorMessage } from "@/lib/api";
 import { formatCurrency } from "@/lib/format";
@@ -26,9 +26,7 @@ export function ProductCard({ product }) {
       await addToCart(product._id, 1);
     } catch (err) {
       if (err.status === 401) {
-        router.push(
-          `/login?redirect=${encodeURIComponent(window.location.pathname)}`,
-        );
+        router.push(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
         return;
       }
       setError(getErrorMessage(err));
@@ -45,9 +43,7 @@ export function ProductCard({ product }) {
       await toggleFavourite(product._id);
     } catch (err) {
       if (err.status === 401) {
-        router.push(
-          `/login?redirect=${encodeURIComponent(window.location.pathname)}`,
-        );
+        router.push(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
         return;
       }
       setError(getErrorMessage(err));
@@ -74,9 +70,7 @@ export function ProductCard({ product }) {
         )}
         <button
           onClick={handleToggleFavourite}
-          aria-label={
-            isFavourited ? "Remove from favourites" : "Add to favourites"
-          }
+          aria-label={isFavourited ? "Remove from favourites" : "Add to favourites"}
           className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow hover:bg-white"
         >
           <Heart
@@ -95,18 +89,14 @@ export function ProductCard({ product }) {
           <p className="text-gray-500 text-xs truncate">
             {typeof product.category === "object" ? product.category?.name : ""}
           </p>
-          <span className="text-yellow-500 text-xs">
-            ★{" "}
-            <span className="text-gray-600">
-              ({product.ratings?.count ?? 0})
-            </span>
+          <span className="flex items-center gap-1 text-yellow-500 text-xs">
+            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+            {(product.ratings?.average ?? 0).toFixed(1)}
+            <span className="text-gray-500">({product.ratings?.count ?? 0})</span>
           </span>
         </div>
 
-        <h3
-          className="font-medium text-base mt-1.5 truncate"
-          title={product.name}
-        >
+        <h3 className="font-medium text-base mt-1.5 truncate" title={product.name}>
           {product.name}
         </h3>
 

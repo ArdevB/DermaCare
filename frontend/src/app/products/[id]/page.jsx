@@ -15,13 +15,15 @@ import { usePublicProduct } from "@/hooks/useStorefront";
 import { useShop } from "@/hooks/useShop";
 import { getErrorMessage } from "@/lib/api";
 import { formatCurrency } from "@/lib/format";
+import { StarRatingDisplay } from "@/components/shop/StarRating";
+import { ReviewsSection } from "@/components/shop/ReviewsSection";
 
-const TABS = ["Description", "Ingredients", "Features", "Benefits"];
+const TABS = ["Description", "Ingredients", "Features", "Benefits", "Reviews"];
 
 export default function ProductDetailPage({ params }) {
   const { id } = use(params);
   const router = useRouter();
-  const { product, isLoading, isError } = usePublicProduct(id);
+  const { product, isLoading, isError, refetch } = usePublicProduct(id);
   const { addToCart, toggleFavourite, favouriteProductIds } = useShop();
 
   const [activeImage, setActiveImage] = useState(0);
@@ -176,10 +178,11 @@ export default function ProductDetailPage({ params }) {
             )}
 
             <div className="flex items-center gap-3 mt-3">
-              <span className="text-yellow-500 text-sm">
-                ★{" "}
+              <span className="flex items-center gap-1.5 text-sm">
+                <StarRatingDisplay value={product.ratings?.average ?? 0} />
                 <span className="text-gray-600">
-                  ({product.ratings?.count ?? 0} reviews)
+                  {(product.ratings?.average ?? 0).toFixed(1)} (
+                  {product.ratings?.count ?? 0} reviews)
                 </span>
               </span>
               <span
@@ -271,7 +274,9 @@ export default function ProductDetailPage({ params }) {
                         : "text-gray-400 hover:text-gray-600"
                     }`}
                   >
-                    {t}
+                    {t === "Reviews"
+                      ? `Reviews (${product.ratings?.count ?? 0})`
+                      : t}
                   </button>
                 ))}
               </div>
@@ -309,6 +314,15 @@ export default function ProductDetailPage({ params }) {
                     "No benefit information available."
                   ))}
               </div>
+              {tab === "Reviews" && (
+                <div className="pt-4">
+                  <ReviewsSection
+                    productId={product._id}
+                    ratingsSummary={product.ratings}
+                    onChanged={refetch}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -1,10 +1,9 @@
-import React from 'react'
+import React from "react";
 
 const privacy = () => {
   return (
-     <main className="min-h-screen bg-[#f8f8ff] py-16">
+    <main className="min-h-screen bg-[#f8f8ff] py-16">
       <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-10">
-
         {/* Page Header */}
         <div className="text-center mb-14">
           <h1 className="text-4xl md:text-5xl font-bold text-pink-600">
@@ -23,16 +22,16 @@ const privacy = () => {
         <section className="bg-white rounded-2xl shadow-sm p-6 md:p-10 mb-8">
           <p className="text-gray-700 leading-7 mb-4">
             At <strong className="text-pink-600">Dermacare</strong>, operated by{" "}
-            <strong>Seven Multi Trading Pvt. Ltd.</strong> ("Dermacare,"
-            "we," "us," or "our"), we respect your privacy and are committed
-            to protecting your personal information.
+            <strong>Seven Multi Trading Pvt. Ltd.</strong> ("Dermacare," "we,"
+            "us," or "our"), we respect your privacy and are committed to
+            protecting your personal information.
           </p>
 
           <p className="text-gray-700 leading-7 mb-4">
-            This Privacy Notice explains how we collect, use, store, and
-            protect your information when you visit or use our website,
-            purchase our products, create an account, contact us, or otherwise
-            interact with our services.
+            This Privacy Notice explains how we collect, use, store, and protect
+            your information when you visit or use our website, purchase our
+            products, create an account, contact us, or otherwise interact with
+            our services.
           </p>
 
           <p className="text-gray-700 leading-7">
@@ -46,9 +45,9 @@ const privacy = () => {
           <SubTitle>Personal Information You Provide</SubTitle>
 
           <p>
-            We collect information that you voluntarily provide when you
-            create an account, place an order, contact us, subscribe to our
-            services, or interact with our website.
+            We collect information that you voluntarily provide when you create
+            an account, place an order, contact us, subscribe to our services,
+            or interact with our website.
           </p>
 
           <p>Depending on how you use Dermacare, we may collect:</p>
@@ -69,8 +68,7 @@ const privacy = () => {
           />
 
           <p>
-            We ask that the information you provide is accurate and up to
-            date.
+            We ask that the information you provide is accurate and up to date.
           </p>
 
           <SubTitle>Payment Information</SubTitle>
@@ -115,8 +113,8 @@ const privacy = () => {
           />
 
           <p>
-            This information helps us maintain website security, understand
-            how visitors use our website, and improve our services.
+            This information helps us maintain website security, understand how
+            visitors use our website, and improve our services.
           </p>
         </PrivacySection>
 
@@ -210,9 +208,7 @@ const privacy = () => {
 
         {/* 3 */}
         <PrivacySection title="3. WHEN DO WE SHARE YOUR INFORMATION?">
-          <p>
-            We do not sell your personal information.
-          </p>
+          <p>We do not sell your personal information.</p>
 
           <p>
             However, we may share necessary information with trusted third
@@ -268,8 +264,7 @@ const privacy = () => {
 
           <p>
             You can control or disable cookies through your browser settings.
-            However, disabling certain cookies may affect some website
-            features.
+            However, disabling certain cookies may affect some website features.
           </p>
         </PrivacySection>
 
@@ -303,9 +298,9 @@ const privacy = () => {
         {/* 6 */}
         <PrivacySection title="6. HOW DO WE KEEP YOUR INFORMATION SAFE?">
           <p>
-            We take reasonable technical and organizational measures to
-            protect your personal information from unauthorized access, loss,
-            misuse, alteration, or disclosure.
+            We take reasonable technical and organizational measures to protect
+            your personal information from unauthorized access, loss, misuse,
+            alteration, or disclosure.
           </p>
 
           <p>
@@ -340,8 +335,8 @@ const privacy = () => {
           />
 
           <p>
-            To exercise your rights, you can contact Dermacare using the
-            contact information provided below.
+            To exercise your rights, you can contact Dermacare using the contact
+            information provided below.
           </p>
         </PrivacySection>
 
@@ -368,8 +363,8 @@ const privacy = () => {
           </p>
 
           <p>
-            We are not responsible for the privacy practices or content of
-            these third-party websites.
+            We are not responsible for the privacy practices or content of these
+            third-party websites.
           </p>
 
           <p>
@@ -387,8 +382,8 @@ const privacy = () => {
 
           <p>
             Because there is currently no universally accepted standard for
-            responding to all Do-Not-Track signals, Dermacare may not respond
-            to all such signals.
+            responding to all Do-Not-Track signals, Dermacare may not respond to
+            all such signals.
           </p>
         </PrivacySection>
 
@@ -414,9 +409,9 @@ const privacy = () => {
         {/* 12 */}
         <PrivacySection title="12. HOW CAN YOU CONTACT US?">
           <p>
-            If you have questions, concerns, or requests regarding this
-            Privacy Notice or the way Dermacare handles your personal
-            information, please contact us.
+            If you have questions, concerns, or requests regarding this Privacy
+            Notice or the way Dermacare handles your personal information,
+            please contact us.
           </p>
 
           <div className="mt-6 bg-pink-50 border border-pink-100 rounded-xl p-6">
@@ -439,8 +434,8 @@ const privacy = () => {
         {/* 13 */}
         <PrivacySection title="13. REVIEW, UPDATE, OR DELETE YOUR INFORMATION">
           <p>
-            If you would like to review, update, correct, or request deletion
-            of your personal information, please contact us using the contact
+            If you would like to review, update, correct, or request deletion of
+            your personal information, please contact us using the contact
             details provided above.
           </p>
 
@@ -462,12 +457,10 @@ const privacy = () => {
             experience.
           </p>
         </div>
-
       </div>
     </main>
   );
-}
-
+};
 
 /* Reusable Section Component */
 function PrivacySection({ title, children }) {
@@ -477,23 +470,17 @@ function PrivacySection({ title, children }) {
         {title}
       </h2>
 
-      <div className="space-y-4 text-gray-700 leading-7">
-        {children}
-      </div>
+      <div className="space-y-4 text-gray-700 leading-7">{children}</div>
     </section>
   );
 }
 
-
 /* Reusable Subtitle Component */
 function SubTitle({ children }) {
   return (
-    <h3 className="text-lg font-semibold text-pink-600 pt-4">
-      {children}
-    </h3>
+    <h3 className="text-lg font-semibold text-pink-600 pt-4">{children}</h3>
   );
 }
-
 
 /* Reusable Bullet List Component */
 function BulletList({ items }) {
@@ -503,8 +490,7 @@ function BulletList({ items }) {
         <li key={index}>{item}</li>
       ))}
     </ul>
- 
-  )
+  );
 }
 
-export default privacy
+export default privacy;
