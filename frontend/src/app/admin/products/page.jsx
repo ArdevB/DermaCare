@@ -392,7 +392,7 @@ function AdminProductsPageInner() {
             </div>
             <div className="space-y-1.5">
               <label className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-                Price (USD)
+                Price (Rs.)
               </label>
               <input
                 type="number"
