@@ -25,6 +25,14 @@ export function usePublicCategories() {
   return { categories: data?.categories ?? [], isLoading, error };
 }
 
+export function usePublicBrands(categoryId) {
+  const { data, isLoading, error } = useApiQuery(
+    "/products/brands",
+    categoryId ? { category: categoryId } : undefined,
+  );
+  return { brands: data?.brands ?? [], isLoading, error };
+}
+
 export function useMyOrders() {
   const { data, isLoading, error, refetch } = useApiQuery("/orders/my");
   return { orders: data?.orders ?? [], isLoading, error, refetch };

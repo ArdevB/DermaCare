@@ -23,7 +23,7 @@ export function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden w-64 shrink-0 flex-col border-r bg-white lg:flex">
+    <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col overflow-y-auto border-r bg-white lg:flex">
       <div className="px-6 py-6">
         <span className="flex items-center font-semibold text-lg">
           <span className="text-[#3A5134]">Derma</span>
@@ -37,7 +37,9 @@ export function AdminSidebar() {
       <nav className="flex-1 space-y-1 px-3">
         {navItems.map((item) => {
           const active =
-            item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);
+            item.href === "/admin"
+              ? pathname === "/admin"
+              : pathname.startsWith(item.href);
           const Icon = item.icon;
           return (
             <Link
@@ -47,7 +49,7 @@ export function AdminSidebar() {
                 "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
                 active
                   ? "bg-pink-500 text-white shadow-sm"
-                  : "text-gray-600 hover:bg-gray-100"
+                  : "text-gray-600 hover:bg-gray-100",
               )}
             >
               <Icon className="h-4 w-4" />

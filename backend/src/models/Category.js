@@ -25,12 +25,16 @@ const categorySchema = new mongoose.Schema(
       url: { type: String, default: null },
       publicId: { type: String, default: null },
     },
+    banner: {
+      url: { type: String, default: null },
+      publicId: { type: String, default: null },
+    },
     isActive: {
       type: Boolean,
       default: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 categorySchema.pre("validate", function (next) {

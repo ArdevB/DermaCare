@@ -54,13 +54,10 @@ export default function BrandCarousel() {
 
   return (
     <section className="w-full bg-[#f8f8ff] py-12">
-
       {/* Main Container */}
       <div className="max-w-[1400px] mx-auto px-6">
-
         {/* Heading + Arrows */}
         <div className="flex items-center justify-between mb-6">
-
           <div>
             <h2 className="text-3xl md:text-4xl font-bold text-[#ed2f68]">
               Popular Brands
@@ -69,10 +66,8 @@ export default function BrandCarousel() {
             <div className="w-24 h-[3px] bg-[#ed2f68] mt-3"></div>
           </div>
 
-
           {/* Arrow Buttons */}
           <div className="flex gap-2">
-
             {/* Previous */}
             <button
               onClick={prevSlide}
@@ -89,7 +84,6 @@ export default function BrandCarousel() {
               ‹
             </button>
 
-
             {/* Next */}
             <button
               onClick={nextSlide}
@@ -105,15 +99,11 @@ export default function BrandCarousel() {
             >
               ›
             </button>
-
           </div>
-
         </div>
-
 
         {/* Carousel Wrapper */}
         <div className="overflow-hidden">
-
           {/* Sliding Track */}
           <div
             className="flex gap-5 transition-transform duration-500 ease-in-out"
@@ -121,9 +111,7 @@ export default function BrandCarousel() {
               transform: `translateX(-${current * 25.5}%)`,
             }}
           >
-
             {brands.map((brand, index) => (
-
               <div
                 key={index}
                 className="
@@ -133,14 +121,13 @@ export default function BrandCarousel() {
                   lg:w-[calc(25%-15px)]
                 "
               >
-
                 {/* Brand Card */}
-                <div className="bg-white rounded-2xl overflow-hidden shadow-sm
-                                hover:shadow-md transition duration-300">
-
+                <div
+                  className="bg-white rounded-2xl overflow-hidden shadow-sm
+                                hover:shadow-md transition duration-300"
+                >
                   {/* Image */}
                   <div className="w-full h-[500px] overflow-hidden">
-
                     <img
                       src={brand.image}
                       alt={brand.name}
@@ -153,31 +140,20 @@ export default function BrandCarousel() {
                         duration-500
                       "
                     />
-
                   </div>
-
 
                   {/* Brand Name */}
                   <div className="px-5 py-5">
-
                     <h3 className="text-xl font-semibold text-[#ed2f68]">
                       {brand.name}
                     </h3>
-
                   </div>
-
                 </div>
-
               </div>
-
             ))}
-
           </div>
-
         </div>
-
       </div>
-
     </section>
   );
 }

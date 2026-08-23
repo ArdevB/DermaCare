@@ -9,20 +9,20 @@ const row1 = [
   { name: "sheglam", src: "/images/brand/sheglam.png" },
   { name: "maybelline", src: "/images/brand/maybelline.png" },
   { name: "cetaphill", src: "/images/brand/cetaphil.jfif" },
-  {name:"technic", src:"/images/brand/technic.png"},
-  {name:"dermaco", src:"/images/brand/dermaco.webp"},
-  {name:"mars", src:"/images/brand/mars.webp"},
-  {name:"swisbeauty", src:"/images/brand/swisbeauty.webp"},
+  { name: "technic", src: "/images/brand/technic.png" },
+  { name: "dermaco", src: "/images/brand/dermaco.webp" },
+  { name: "mars", src: "/images/brand/mars.webp" },
+  { name: "swisbeauty", src: "/images/brand/swisbeauty.webp" },
 ];
 
 const row2 = [
   { name: "mamaearth", src: "/images/brand/mamaearth.png" },
   { name: "loreal", src: "/images/brand/loreal.png" },
-  { name: "minimalist", src: "/images/brand/minimalist.jpg"},
+  { name: "minimalist", src: "/images/brand/minimalist.jpg" },
   { name: "piligrim", src: "/images/brand/pilgrim.png" },
   { name: "plum", src: "/images/brand/plump.png" },
   { name: "dotkey", src: "/images/brand/dotkey.webp" },
-  {name: "chemistplay", src:"/images/brand/chemistplay.jpg"},
+  { name: "chemistplay", src: "/images/brand/chemistplay.jpg" },
 ];
 
 function BrandRow({ brands, reverse = false }) {
@@ -76,13 +76,11 @@ function BrandRow({ brands, reverse = false }) {
 export default function BrandSlider() {
   return (
     <section className="w-full overflow-hidden bg-white py-8">
-      
       {/* Row 1 → moves left */}
       <BrandRow brands={row1} />
 
       {/* Row 2 → moves right */}
       <BrandRow brands={row2} reverse />
-
     </section>
   );
 }

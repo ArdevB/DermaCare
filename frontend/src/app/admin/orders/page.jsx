@@ -10,6 +10,11 @@ import { useAllOrders } from "@/hooks/useAdminApi";
 import { updateOrderStatus } from "@/lib/adminActions";
 import { getErrorMessage } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/format";
+import {
+  FadeInSection,
+  StaggerGrid,
+  StaggerItem,
+} from "@/components/shop/FadeInSection";
 
 const STATUS_OPTIONS = [
   "pending",
@@ -57,7 +62,7 @@ export default function AdminOrdersPage() {
     <>
       <AdminTopbar title="Orders" user={user} />
       <main className="p-4 lg:p-8">
-        <div className="rounded-xl border bg-white shadow-sm">
+        <FadeInSection className="rounded-xl border bg-white shadow-sm">
           <div className="flex flex-col gap-3 border-b p-5 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-lg font-semibold text-gray-900">
@@ -117,7 +122,7 @@ export default function AdminOrdersPage() {
                     <th className="px-4 py-2.5">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y">
+                <StaggerGrid as="tbody" className="divide-y">
                   {orders.map((order) => {
                     const customer =
                       typeof order.user === "object" ? order.user : null;
@@ -125,7 +130,11 @@ export default function AdminOrdersPage() {
                       order.status === "delivered" ||
                       order.status === "cancelled";
                     return (
-                      <tr key={order._id} className="hover:bg-gray-50">
+                      <StaggerItem
+                        as="tr"
+                        key={order._id}
+                        className="hover:bg-gray-50"
+                      >
                         <td className="px-4 py-3.5">
                           <Link
                             href={`/admin/orders/${order._id}`}
@@ -175,10 +184,10 @@ export default function AdminOrdersPage() {
                             </select>
                           )}
                         </td>
-                      </tr>
+                      </StaggerItem>
                     );
                   })}
-                </tbody>
+                </StaggerGrid>
               </table>
             </div>
           ) : (
@@ -188,7 +197,7 @@ export default function AdminOrdersPage() {
           )}
 
           <PaginationBar pagination={pagination} onPageChange={setPage} />
-        </div>
+        </FadeInSection>
       </main>
     </>
   );

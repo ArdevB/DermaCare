@@ -3,6 +3,7 @@
 import { use, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Heart,
   ShoppingCart,
@@ -124,15 +125,25 @@ export default function ProductDetailPage({ params }) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* Gallery */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.45, ease: "easeOut" }}
+          >
             <div className="aspect-square w-full overflow-hidden rounded-xl bg-white border">
               {images.length > 0 ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={images[activeImage]?.url}
-                  alt={product.name}
-                  className="h-full w-full object-cover"
-                />
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={activeImage}
+                    src={images[activeImage]?.url}
+                    alt={product.name}
+                    initial={{ opacity: 0, scale: 1.03 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="h-full w-full object-cover"
+                  />
+                </AnimatePresence>
               ) : (
                 <div className="flex h-full w-full items-center justify-center text-gray-300">
                   <ImageOff className="h-16 w-16" />
@@ -142,9 +153,11 @@ export default function ProductDetailPage({ params }) {
             {images.length > 1 && (
               <div className="mt-3 flex gap-2">
                 {images.map((img, idx) => (
-                  <button
+                  <motion.button
                     key={img.publicId ?? idx}
                     onClick={() => setActiveImage(idx)}
+                    whileHover={{ scale: 1.08 }}
+                    whileTap={{ scale: 0.95 }}
                     className={`h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 ${
                       idx === activeImage
                         ? "border-pink-500"
@@ -157,14 +170,18 @@ export default function ProductDetailPage({ params }) {
                       alt=""
                       className="h-full w-full object-cover"
                     />
-                  </button>
+                  </motion.button>
                 ))}
               </div>
             )}
-          </div>
+          </motion.div>
 
           {/* Details */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, x: 16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.45, delay: 0.1, ease: "easeOut" }}
+          >
             {typeof product.category === "object" && product.category?.name && (
               <p className="text-sm text-pink-500 font-medium">
                 {product.category.name}
@@ -220,45 +237,63 @@ export default function ProductDetailPage({ params }) {
                 </button>
               </div>
 
-              <button
+              <motion.button
                 onClick={handleToggleFavourite}
                 aria-label={
                   isFavourited ? "Remove from favourites" : "Add to favourites"
                 }
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.9 }}
                 className="flex h-10 w-10 items-center justify-center rounded-lg border hover:bg-gray-50"
               >
-                <Heart
-                  className={`h-5 w-5 ${isFavourited ? "fill-pink-500 text-pink-500" : "text-gray-500"}`}
-                />
-              </button>
+                <motion.span
+                  key={isFavourited}
+                  initial={{ scale: 0.6 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                  className="inline-flex"
+                >
+                  <Heart
+                    className={`h-5 w-5 ${isFavourited ? "fill-pink-500 text-pink-500" : "text-gray-500"}`}
+                  />
+                </motion.span>
+              </motion.button>
             </div>
 
             {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
             {added && !error && (
-              <p className="mt-3 text-sm text-green-600">
+              <motion.p
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-3 text-sm text-green-600"
+              >
                 Added to cart.{" "}
                 <Link href="/cart" className="underline">
                   View cart
                 </Link>
-              </p>
+              </motion.p>
             )}
 
             <div className="mt-5 flex gap-3">
-              <button
+              <motion.button
                 onClick={handleAddToCart}
                 disabled={busy || outOfStock}
+                whileHover={{ scale: busy || outOfStock ? 1 : 1.02 }}
+                whileTap={{ scale: busy || outOfStock ? 1 : 0.97 }}
                 className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#3A5134] px-5 py-3 text-sm font-medium text-white hover:bg-pink-500 disabled:opacity-50"
               >
                 <ShoppingCart className="h-4 w-4" />
                 {outOfStock ? "Sold out" : busy ? "Adding..." : "Add to Cart"}
-              </button>
-              <button
+              </motion.button>
+              <motion.button
                 onClick={handleBuyNow}
                 disabled={busy || outOfStock}
+                whileHover={{ scale: busy || outOfStock ? 1 : 1.02 }}
+                whileTap={{ scale: busy || outOfStock ? 1 : 0.97 }}
                 className="flex flex-1 items-center justify-center rounded-lg bg-pink-500 px-5 py-3 text-sm font-medium text-white hover:bg-pink-600 disabled:opacity-50"
               >
                 Buy Now
-              </button>
+              </motion.button>
             </div>
 
             {/* Tabs */}
@@ -268,63 +303,84 @@ export default function ProductDetailPage({ params }) {
                   <button
                     key={t}
                     onClick={() => setTab(t)}
-                    className={`pb-2.5 text-sm font-medium ${
+                    className={`relative pb-2.5 text-sm font-medium ${
                       tab === t
-                        ? "border-b-2 border-pink-500 text-pink-500"
+                        ? "text-pink-500"
                         : "text-gray-400 hover:text-gray-600"
                     }`}
                   >
                     {t === "Reviews"
                       ? `Reviews (${product.ratings?.count ?? 0})`
                       : t}
+                    {tab === t && (
+                      <motion.span
+                        layoutId="product-tab-underline"
+                        className="absolute -bottom-px left-0 right-0 h-0.5 bg-pink-500"
+                        transition={{
+                          type: "spring",
+                          stiffness: 400,
+                          damping: 30,
+                        }}
+                      />
+                    )}
                   </button>
                 ))}
               </div>
-              <div className="pt-4 text-sm text-gray-600 leading-relaxed">
-                {tab === "Description" &&
-                  (product.description || "No description available.")}
-                {tab === "Ingredients" &&
-                  (product.ingredients?.length > 0 ? (
-                    <ul className="list-disc pl-5 space-y-1">
-                      {product.ingredients.map((ing) => (
-                        <li key={ing}>{ing}</li>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={tab}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="pt-4 text-sm text-gray-600 leading-relaxed">
+                    {tab === "Description" &&
+                      (product.description || "No description available.")}
+                    {tab === "Ingredients" &&
+                      (product.ingredients?.length > 0 ? (
+                        <ul className="list-disc pl-5 space-y-1">
+                          {product.ingredients.map((ing) => (
+                            <li key={ing}>{ing}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        "No ingredient information available."
                       ))}
-                    </ul>
-                  ) : (
-                    "No ingredient information available."
-                  ))}
-                {tab === "Features" &&
-                  (product.features?.length > 0 ? (
-                    <ul className="list-disc pl-5 space-y-1">
-                      {product.features.map((f) => (
-                        <li key={f}>{f}</li>
+                    {tab === "Features" &&
+                      (product.features?.length > 0 ? (
+                        <ul className="list-disc pl-5 space-y-1">
+                          {product.features.map((f) => (
+                            <li key={f}>{f}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        "No feature information available."
                       ))}
-                    </ul>
-                  ) : (
-                    "No feature information available."
-                  ))}
-                {tab === "Benefits" &&
-                  (product.benefits?.length > 0 ? (
-                    <ul className="list-disc pl-5 space-y-1">
-                      {product.benefits.map((b) => (
-                        <li key={b}>{b}</li>
+                    {tab === "Benefits" &&
+                      (product.benefits?.length > 0 ? (
+                        <ul className="list-disc pl-5 space-y-1">
+                          {product.benefits.map((b) => (
+                            <li key={b}>{b}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        "No benefit information available."
                       ))}
-                    </ul>
-                  ) : (
-                    "No benefit information available."
-                  ))}
-              </div>
-              {tab === "Reviews" && (
-                <div className="pt-4">
-                  <ReviewsSection
-                    productId={product._id}
-                    ratingsSummary={product.ratings}
-                    onChanged={refetch}
-                  />
-                </div>
-              )}
+                  </div>
+                  {tab === "Reviews" && (
+                    <div className="pt-4">
+                      <ReviewsSection
+                        productId={product._id}
+                        ratingsSummary={product.ratings}
+                        onChanged={refetch}
+                      />
+                    </div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </main>

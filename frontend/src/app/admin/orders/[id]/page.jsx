@@ -10,6 +10,7 @@ import { useOrder } from "@/hooks/useAdminApi";
 import { updateOrderStatus, verifyBankTransfer } from "@/lib/adminActions";
 import { getErrorMessage } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/format";
+import { FadeInSection } from "@/components/shop/FadeInSection";
 
 const STATUS_OPTIONS = [
   "pending",
@@ -112,7 +113,7 @@ export default function AdminOrderDetailPage({ params }) {
         {order && (
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
             <div className="space-y-6 xl:col-span-2">
-              <div className="rounded-xl border bg-white p-5 shadow-sm">
+              <FadeInSection className="rounded-xl border bg-white p-5 shadow-sm">
                 <div className="mb-4 flex items-center justify-between">
                   <div>
                     <h2 className="text-lg font-semibold text-gray-900">
@@ -145,9 +146,12 @@ export default function AdminOrderDetailPage({ params }) {
                     </div>
                   ))}
                 </div>
-              </div>
+              </FadeInSection>
 
-              <div className="rounded-xl border bg-white p-5 shadow-sm">
+              <FadeInSection
+                delay={0.08}
+                className="rounded-xl border bg-white p-5 shadow-sm"
+              >
                 <h2 className="mb-3 text-lg font-semibold text-gray-900">
                   Shipping address
                 </h2>
@@ -168,11 +172,14 @@ export default function AdminOrderDetailPage({ params }) {
                   </p>
                   <p>{order.shippingAddress.country}</p>
                 </div>
-              </div>
+              </FadeInSection>
             </div>
 
             <div className="space-y-6">
-              <div className="rounded-xl border bg-white p-5 shadow-sm">
+              <FadeInSection
+                delay={0.05}
+                className="rounded-xl border bg-white p-5 shadow-sm"
+              >
                 <h2 className="mb-3 text-lg font-semibold text-gray-900">
                   Update status
                 </h2>
@@ -195,9 +202,12 @@ export default function AdminOrderDetailPage({ params }) {
                     ))}
                   </select>
                 )}
-              </div>
+              </FadeInSection>
 
-              <div className="rounded-xl border bg-white p-5 shadow-sm">
+              <FadeInSection
+                delay={0.1}
+                className="rounded-xl border bg-white p-5 shadow-sm"
+              >
                 <h2 className="mb-3 text-lg font-semibold text-gray-900">
                   Payment
                 </h2>
@@ -298,9 +308,12 @@ export default function AdminOrderDetailPage({ params }) {
                       </div>
                     )}
                 </div>
-              </div>
+              </FadeInSection>
 
-              <div className="rounded-xl border bg-white p-5 shadow-sm">
+              <FadeInSection
+                delay={0.15}
+                className="rounded-xl border bg-white p-5 shadow-sm"
+              >
                 <h2 className="mb-3 text-lg font-semibold text-gray-900">
                   Summary
                 </h2>
@@ -318,7 +331,7 @@ export default function AdminOrderDetailPage({ params }) {
                     <span>{formatCurrency(order.totalAmount)}</span>
                   </div>
                 </div>
-              </div>
+              </FadeInSection>
             </div>
           </div>
         )}

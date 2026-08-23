@@ -5,11 +5,42 @@ import logger from "../utils/logger.js";
 import { generateProductCopy } from "./geminiService.js";
 import { uploadImages, deleteImages } from "./cloudinaryService.js";
 
-const isBlank = (str) => str === undefined || str === null || String(str).trim() === "";
+const isBlank = (str) =>
+  str === undefined || str === null || String(str).trim() === "";
 
-export const listProducts = async ({ page = 1, limit = 20, category, search, minPrice, maxPrice, sort }) => {
+export const listProducts = async ({
+  page = 1,
+  limit = 20,
+  category,
+  brand,
+  search,
+  minPrice,
+  maxPrice,
+  sort,
+}) => {
   const query = { isActive: true };
-  if (category) query.category = category;
+  if (category) {
+    // Supports a single id or a comma-separated list (checkbox-style multi-select filters).
+    const ids = String(category)
+      .split(",")
+      .map((c) => c.trim())
+      .filter(Boolean);
+    query.category = ids.length > 1 ? { $in: ids } : ids[0];
+  }
+  if (brand) {
+    const brands = String(brand)
+      .split(",")
+      .map((b) => b.trim())
+      .filter(Boolean);
+    if (brands.length > 0) {
+      query.brand = {
+        $in: brands.map(
+          (b) =>
+            new RegExp(`^${b.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i"),
+        ),
+      };
+    }
+  }
   if (minPrice !== undefined || maxPrice !== undefined) {
     query.price = {};
     if (minPrice !== undefined) query.price.$gte = minPrice;
@@ -30,7 +61,11 @@ export const listProducts = async ({ page = 1, limit = 20, category, search, min
   const sortOption = sortMap[sort] || { createdAt: -1 };
 
   const [products, total] = await Promise.all([
-    Product.find(query).populate("category", "name slug").sort(sortOption).skip(skip).limit(limit),
+    Product.find(query)
+      .populate("category", "name slug")
+      .sort(sortOption)
+      .skip(skip)
+      .limit(limit),
     Product.countDocuments(query),
   ]);
 
@@ -43,6 +78,13 @@ export const listProducts = async ({ page = 1, limit = 20, category, search, min
       pages: Math.ceil(total / limit),
     },
   };
+};
+
+export const listDistinctBrands = async (categoryId) => {
+  const filter = { isActive: true, brand: { $nin: [null, ""] } };
+  if (categoryId) filter.category = categoryId;
+  const brands = await Product.distinct("brand", filter);
+  return brands.sort((a, b) => a.localeCompare(b));
 };
 
 export const getProductById = async (id) => {
@@ -132,7 +174,10 @@ export const updateProduct = async (id, data, files = []) => {
   // - key not sent at all  -> leave existing value untouched, no Gemini call
   // - key sent but blank/empty -> treat as "removed", regenerate via Gemini
   // - key sent with content -> use as-is, no Gemini call
-  const sentDescription = Object.prototype.hasOwnProperty.call(data, "description");
+  const sentDescription = Object.prototype.hasOwnProperty.call(
+    data,
+    "description",
+  );
   const sentFeatures = Object.prototype.hasOwnProperty.call(data, "features");
   const sentBenefits = Object.prototype.hasOwnProperty.call(data, "benefits");
 
@@ -165,7 +210,8 @@ export const updateProduct = async (id, data, files = []) => {
       data.benefitsGeneratedByAI = true;
     }
   }
-  if (sentDescription && !needsDescription) data.descriptionGeneratedByAI = false;
+  if (sentDescription && !needsDescription)
+    data.descriptionGeneratedByAI = false;
   if (sentFeatures && !needsFeatures) data.featuresGeneratedByAI = false;
   if (sentBenefits && !needsBenefits) data.benefitsGeneratedByAI = false;
 

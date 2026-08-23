@@ -21,6 +21,7 @@ function categoryFormData(values) {
   if (values.isActive !== undefined)
     fd.append("isActive", String(values.isActive));
   if (values.image) fd.append("image", values.image);
+  if (values.banner) fd.append("banner", values.banner);
   return fd;
 }
 

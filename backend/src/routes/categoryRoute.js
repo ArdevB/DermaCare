@@ -3,7 +3,10 @@ import * as categoryController from "../controllers/categoryController.js";
 import { protect, authorizeRoles } from "../middleware/auth.js";
 import validate from "../middleware/validate.js";
 import upload from "../middleware/upload.js";
-import { createCategorySchema, updateCategorySchema } from "../validators/categoryValidators.js";
+import {
+  createCategorySchema,
+  updateCategorySchema,
+} from "../validators/categoryValidators.js";
 
 const router = express.Router();
 
@@ -14,20 +17,31 @@ router.post(
   "/",
   protect,
   authorizeRoles("admin"),
-  upload.single("image"),
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "banner", maxCount: 1 },
+  ]),
   validate(createCategorySchema),
-  categoryController.createCategory
+  categoryController.createCategory,
 );
 
 router.put(
   "/:id",
   protect,
   authorizeRoles("admin"),
-  upload.single("image"),
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "banner", maxCount: 1 },
+  ]),
   validate(updateCategorySchema),
-  categoryController.updateCategory
+  categoryController.updateCategory,
 );
 
-router.delete("/:id", protect, authorizeRoles("admin"), categoryController.deleteCategory);
+router.delete(
+  "/:id",
+  protect,
+  authorizeRoles("admin"),
+  categoryController.deleteCategory,
+);
 
 export default router;

@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Pencil, Trash2, ImageOff } from "lucide-react";
+import {
+  Plus,
+  Pencil,
+  Trash2,
+  ImageOff,
+  Image as ImageIcon,
+} from "lucide-react";
 import { AdminTopbar } from "@/components/admin/Topbar";
 import { Modal, ConfirmDialog } from "@/components/admin/Modal";
 import { useCurrentUser } from "@/lib/auth";
@@ -12,8 +18,19 @@ import {
   deleteCategory,
 } from "@/lib/adminActions";
 import { getErrorMessage } from "@/lib/api";
+import {
+  FadeInSection,
+  StaggerGrid,
+  StaggerItem,
+} from "@/components/shop/FadeInSection";
 
-const emptyForm = { name: "", description: "", isActive: true, image: null };
+const emptyForm = {
+  name: "",
+  description: "",
+  isActive: true,
+  image: null,
+  banner: null,
+};
 
 export default function AdminCategoriesPage() {
   const { user } = useCurrentUser();
@@ -41,6 +58,7 @@ export default function AdminCategoriesPage() {
       description: category.description ?? "",
       isActive: category.isActive,
       image: null,
+      banner: null,
     });
     setError("");
     setModalOpen(true);
@@ -104,7 +122,7 @@ export default function AdminCategoriesPage() {
             {error}
           </div>
         )}
-        <div className="rounded-xl border bg-white shadow-sm">
+        <FadeInSection className="rounded-xl border bg-white shadow-sm">
           {isError && (
             <div className="p-6 text-center text-sm text-red-500">
               Couldn&apos;t load categories. Check that the backend server is
@@ -121,11 +139,11 @@ export default function AdminCategoriesPage() {
               ))}
             </div>
           ) : categories.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 lg:grid-cols-3">
+            <StaggerGrid className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 lg:grid-cols-3">
               {categories.map((category) => (
-                <div
+                <StaggerItem
                   key={category._id}
-                  className="flex items-center gap-3 rounded-xl border p-3"
+                  className="flex items-center gap-3 rounded-xl border p-3 transition-shadow hover:shadow-md"
                 >
                   <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gray-100">
                     {category.image?.url ? (
@@ -146,6 +164,15 @@ export default function AdminCategoriesPage() {
                     <p className="truncate text-xs text-gray-400">
                       {category.description || "No description"}
                     </p>
+                    {category.banner?.url ? (
+                      <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-600">
+                        <ImageIcon className="h-2.5 w-2.5" /> Banner set
+                      </span>
+                    ) : (
+                      <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-600">
+                        No banner
+                      </span>
+                    )}
                   </div>
                   <div className="flex shrink-0 gap-1">
                     <button
@@ -161,15 +188,15 @@ export default function AdminCategoriesPage() {
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
-                </div>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerGrid>
           ) : (
             <p className="p-8 text-center text-sm text-gray-400">
               No categories yet. Create your first one to start adding products.
             </p>
           )}
-        </div>
+        </FadeInSection>
       </main>
 
       <Modal
@@ -206,7 +233,7 @@ export default function AdminCategoriesPage() {
           </div>
           <div className="space-y-1.5">
             <label className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-              Image
+              Thumbnail image
             </label>
             <input
               type="file"
@@ -216,6 +243,46 @@ export default function AdminCategoriesPage() {
               }
               className="w-full text-sm"
             />
+            <p className="text-xs text-gray-400">
+              Small square icon used in category lists.
+            </p>
+          </div>
+          <div className="space-y-1.5 rounded-lg border border-dashed border-pink-200 bg-pink-50/50 p-3">
+            <label className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+              Banner image
+            </label>
+            {editing?.banner?.url && !form.banner && (
+              <div className="overflow-hidden rounded-lg border">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={editing.banner.url}
+                  alt="Current banner"
+                  className="h-24 w-full object-cover"
+                />
+              </div>
+            )}
+            {form.banner && (
+              <div className="overflow-hidden rounded-lg border">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={URL.createObjectURL(form.banner)}
+                  alt="New banner preview"
+                  className="h-24 w-full object-cover"
+                />
+              </div>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) =>
+                setForm((f) => ({ ...f, banner: e.target.files?.[0] ?? null }))
+              }
+              className="w-full text-sm"
+            />
+            <p className="text-xs text-gray-400">
+              Wide hero image shown at the top of this category&apos;s product
+              page (recommend ~1920&times;480).
+            </p>
           </div>
           <label className="flex items-center justify-between rounded-lg border px-3 py-2.5">
             <span className="text-sm text-gray-700">

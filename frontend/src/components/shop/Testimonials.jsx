@@ -2,7 +2,11 @@
 
 import { Quote } from "lucide-react";
 import { StarRatingDisplay } from "@/components/shop/StarRating";
-import { FadeInSection, StaggerGrid, StaggerItem } from "@/components/shop/FadeInSection";
+import {
+  FadeInSection,
+  StaggerGrid,
+  StaggerItem,
+} from "@/components/shop/FadeInSection";
 
 // Curated launch copy - swap these for real customer quotes once you have
 // reviews coming in (or pull your highest-rated product reviews here).
@@ -46,10 +50,14 @@ export function Testimonials() {
             <StaggerItem key={t.name}>
               <div className="h-full rounded-2xl bg-white p-6 shadow-sm border border-pink-100">
                 <Quote className="h-6 w-6 text-pink-300" />
-                <p className="mt-3 text-sm text-gray-600 leading-relaxed">{t.quote}</p>
+                <p className="mt-3 text-sm text-gray-600 leading-relaxed">
+                  {t.quote}
+                </p>
                 <div className="mt-5 flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-semibold text-gray-900">{t.name}</p>
+                    <p className="text-sm font-semibold text-gray-900">
+                      {t.name}
+                    </p>
                     <p className="text-xs text-gray-400">{t.role}</p>
                   </div>
                   <StarRatingDisplay value={t.rating} size="h-3.5 w-3.5" />

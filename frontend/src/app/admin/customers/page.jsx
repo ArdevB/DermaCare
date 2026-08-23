@@ -11,6 +11,11 @@ import { useUsers } from "@/hooks/useAdminApi";
 import { updateUserRole, deleteUser } from "@/lib/adminActions";
 import { getErrorMessage } from "@/lib/api";
 import { formatDate, initials } from "@/lib/format";
+import {
+  FadeInSection,
+  StaggerGrid,
+  StaggerItem,
+} from "@/components/shop/FadeInSection";
 
 export default function AdminCustomersPage() {
   const { user: currentUser } = useCurrentUser();
@@ -63,7 +68,7 @@ export default function AdminCustomersPage() {
             {error}
           </div>
         )}
-        <div className="rounded-xl border bg-white shadow-sm">
+        <FadeInSection className="rounded-xl border bg-white shadow-sm">
           {isError && (
             <div className="p-6 text-center text-sm text-red-500">
               Couldn&apos;t load customers. Check that the backend server is
@@ -91,11 +96,15 @@ export default function AdminCustomersPage() {
                     <th className="px-4 py-2.5 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y">
+                <StaggerGrid as="tbody" className="divide-y">
                   {users.map((user) => {
                     const isSelf = user._id === currentUser?._id;
                     return (
-                      <tr key={user._id} className="hover:bg-gray-50">
+                      <StaggerItem
+                        as="tr"
+                        key={user._id}
+                        className="hover:bg-gray-50"
+                      >
                         <td className="px-4 py-3.5">
                           <div className="flex items-center gap-3">
                             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-pink-100 text-xs font-semibold text-pink-600">
@@ -156,10 +165,10 @@ export default function AdminCustomersPage() {
                             <Trash2 className="h-4 w-4" />
                           </button>
                         </td>
-                      </tr>
+                      </StaggerItem>
                     );
                   })}
-                </tbody>
+                </StaggerGrid>
               </table>
             </div>
           ) : (
@@ -169,7 +178,7 @@ export default function AdminCustomersPage() {
           )}
 
           <PaginationBar pagination={pagination} onPageChange={setPage} />
-        </div>
+        </FadeInSection>
       </main>
 
       <ConfirmDialog
