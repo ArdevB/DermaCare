@@ -6,7 +6,7 @@ export default function ReviewPage() {
   const [reviews, setReviews] = useState([
     {
       id: 1,
-      name: "Anisha K.",
+      name: "Anisha",
       product: "CeraVe Moisturizing Cream",
       rating: 5,
       review:
